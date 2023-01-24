@@ -1,1 +1,8 @@
-package git_demo
+package main
+
+import "fmt"
+
+func main() {
+
+	fmt.Println(123)
+}
