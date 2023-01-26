@@ -7,7 +7,6 @@ import (
 
 func main() {
 	svr := api.NewServer(new(EchoImpl))
-
 	err := svr.Run()
 
 	if err != nil {
