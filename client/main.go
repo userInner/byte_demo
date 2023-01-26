@@ -15,8 +15,15 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	req := &api.Request{Message: "my request"}
-	resp, err := c.Echo(context.Background(), req, callopt.WithRPCTimeout(3*time.Second))
+	req := &api.Request{
+		Message: "Hello World",
+		A:       1314,
+		B:       520,
+	}
+	resp, err := c.Echo(
+		context.Background(),
+		req,
+		callopt.WithRPCTimeout(3*time.Second))
 	if err != nil {
 		log.Fatal(err)
 	}
