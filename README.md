@@ -4,7 +4,7 @@
 mkdir byte_demo
 cd byte_demo
 git init
-git branch -b byte_demo.V1
+git checkout -b byte_demo.V1
 git remote add origin git@github.com:userInner/byte_demo.git
 git pull origin bytedemo.V1
 ````
