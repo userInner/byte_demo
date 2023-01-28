@@ -54,11 +54,20 @@ func UserLogin(c *gin.Context) {
 		return
 	}
 
-	res := userService.Login(c)
+	res, err := userService.Login(c)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, dto.UserInfoDto{
+			StatusCode: 1,
+			StatusMsg:  &InvalidParams,
+		})
+		return
+	}
 	c.JSON(http.StatusOK, res)
 }
 
 /*
+UserInfo 获取用户信息。
 参数；user_id,token
 */
 func UserInfo(c *gin.Context) {
@@ -101,7 +110,7 @@ func UserInfo(c *gin.Context) {
 		return
 	}
 	// 查询用户是否关注user_id
-	respUserInfo := dto.UserInfoDto{}.BuildUserInfoDto(6000, "查询成功", u)
+	respUserInfo := dto.UserInfoDto{}.BuildUserInfoDto(6666, "查询成功", u)
 	target_u := &models.User{ID: int64(target_u_id)}
 	is_follow := dao.GetUserFollow(u, target_u)
 	if !is_follow {
