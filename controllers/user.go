@@ -101,7 +101,7 @@ func UserInfo(c *gin.Context) {
 		return
 	}
 	// 查询用户是否关注user_id
-	respUserInfo := dto.UserInfoDto{}.BuildUserInfoDto(6666, "查询成功", u)
+	respUserInfo := dto.UserInfoDto{}.BuildUserInfoDto(6000, "查询成功", u)
 	target_u := &models.User{ID: int64(target_u_id)}
 	is_follow := dao.GetUserFollow(u, target_u)
 	if !is_follow {

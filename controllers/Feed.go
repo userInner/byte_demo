@@ -65,6 +65,30 @@ func GetFeed(c *gin.Context) {
 	c.JSON(http.StatusOK, respFeed)
 }
 
+// 查询用户投稿视频
 func GetUserVideo(c *gin.Context) {
-
+	token := c.Query("token")
+	user_id := c.Query("user_id")
+	if len(token) == 0 {
+		c.JSON(401, dto.BuildUserFeed(1001, "参数无效", nil))
+		return
+	}
+	u_id, err := middleware.VerifyToken(token)
+	if err != nil {
+		c.JSON(401, dto.BuildUserFeed(1001, "暂无权限", nil))
+		return
+	}
+	target_u_id, err := strconv.Atoi(user_id)
+	if err != nil {
+		c.JSON(401, dto.BuildUserFeed(1001, "暂无权限", nil))
+		return
+	}
+	my_user := &models.User{ID: u_id}
+	target_user := &models.User{ID: int64(target_u_id)}
+	videos, err := dao.GetVideoByUser(*target_user)
+	for _, v := range videos {
+		v.Author.IsFollow = dao.GetUserFollow(my_user, target_user)
+		v.IsFavorite = dao.GetFavourite(my_user, &v)
+	}
+	c.JSON(200, dto.BuildUserFeed(6000, "查询成功", videos))
 }
