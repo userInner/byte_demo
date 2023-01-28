@@ -13,7 +13,7 @@ type Video struct {
 	Title       string    `json:"title" gorm:"column:title"`                           // 视频标题
 	Create_time time.Time `json:"create_time" gorm:"column:create_time;type:datetime"` // 创建时间
 	Update_time time.Time `json:"update_time" gorm:"column:update_time;type:datetime"` // 更新时间
-	Is_favorite bool      `json:"is_follow"`                                           // 是否为点赞
+	Is_favorite Favourite `json:"is_follow"`                                           // 是否为粉丝
 }
 
 func (v Video) TableName() string {
