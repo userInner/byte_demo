@@ -7,8 +7,13 @@ import (
 
 /*
 	1000～1999 区间表示参数错误
-	2000～2999 区间表示用户错误
+	1001 用户参数无效
+
+	2000～2999 区间表示数据正常
+
 	3000～3999 区间表示接口异常
+	3001 查询数据失败
+
 */
 
 func Response(c *gin.Context, httpStatus, code int, data gin.H, msg string) {

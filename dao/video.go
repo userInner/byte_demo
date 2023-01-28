@@ -16,7 +16,7 @@ func GetVideo(time string) ([]models.Video, error) {
 		Where("create_time <= ?", time).
 		Find(&videos).Error
 	if err != nil {
-		return nil, errors.New("get video failed")
+		return nil, errors.New("get video failed" + err.Error())
 	}
 	return videos, nil
 }
@@ -28,11 +28,11 @@ func GetOnVideo(user *models.User, to *models.User, t string) ([]models.Video, e
 	// 查询 点赞状态 是否关注
 	var videos []models.Video
 	common.GetDB().
-		Preload("Author").         // 用户
+		Preload("Author"). // 用户
 		Order("create_time desc"). // create_time 最新
 		Limit(30).
 		Where("create_time > ?" + t).
-		Find(videos)
-
+		Find(&videos)
+ 
 	return nil, nil
 }

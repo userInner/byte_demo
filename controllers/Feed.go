@@ -35,13 +35,15 @@ func GetFeed(c *gin.Context) {
 	videos, err := dao.GetVideo(t)
 	if err != nil {
 		response.Fail(c, gin.H{
-			"msg": "查询失败",
+			"msg":   "查询失败",
+			"error": err,
 		}, "3001")
+		return
 	}
 
 	// 得到最新投稿时间
 	last := len(videos)
-	last_time := utils.GetTimeInt64(videos[last-1].Create_time.String())
+	last_time := utils.GetTimeInt64(videos[last-1].CreateTime.String())
 	// 校验token
 	if utils.VaildToken(token) { // 有上传token,并且为合法token
 		// 关注

@@ -22,6 +22,7 @@ var (
 	err error
 )
 
+// InitMysql 数据库初始化
 func InitMysql() {
 	args := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true",
 		username,

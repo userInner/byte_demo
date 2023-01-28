@@ -15,5 +15,6 @@ func BuildFeed(nextTime int64, statusCode int64, statusMsg string, videoList []m
 	feed.StatusCode = statusCode
 	feed.StatusMsg = statusMsg
 	feed.VideoList = videoList
+
 	return feed
 }
