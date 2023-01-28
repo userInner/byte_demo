@@ -28,7 +28,7 @@ func GetOnVideo(user *models.User, to *models.User, t string) ([]models.Video, e
 	// 查询 点赞状态 是否关注
 	var videos []models.Video
 	common.GetDB().
-		Preload("Author"). // 用户
+		Preload("Author").         // 用户
 		Order("create_time desc"). // create_time 最新
 		Limit(30).
 		Where("create_time > ?" + t).

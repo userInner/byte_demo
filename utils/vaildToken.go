@@ -1,5 +1,7 @@
 package utils
 
+import "titok_v1/models"
+
 /*
 	验证token是否合法
 */

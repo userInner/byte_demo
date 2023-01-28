@@ -25,7 +25,7 @@ func (u UserInfoDto) BuildUserInfoDto(code int64, msg string, user *models.User)
 		FollowCount:   user.FollowerCount,
 		FollowerCount: user.FollowerCount,
 		ID:            user.ID,
-		IsFollow:      user.IsFollow,
+		IsFollow:      false,
 		Name:          user.UserName,
 	}
 	return &UserInfoDto{

@@ -60,7 +60,6 @@ func (user *UserService) Register(c *gin.Context) *resp.UserLoginResp {
 	newUser := &models.User{
 		UserName:      user.Name,
 		Password:      utils.Md5Crypt(user.Passwd, secret),
-		IsFollow:      models.Follow{},
 		FollowCount:   0,
 		FollowerCount: 0,
 		Create_time:   time.Now().Local(),
