@@ -18,6 +18,40 @@ import (
  日期： 2023-1-27 16:56
 */
 
+type Response struct {
+	StatusCode int32  `json:"status_code"`
+	StatusMsg  string `json:"status_msg,omitempty"`
+}
+
+type FeedResponse struct {
+	Response
+	VideoList []models.Video `json:"video_list,omitempty"`
+	NextTime  int64          `json:"next_time,omitempty"`
+}
+
+var DemoVideos = []models.Video{
+	{
+		Author:         models.User{ID: 6, UserName: "jj"},
+		CoverURL:       "https://cdn.pixabay.com/photo/2016/03/27/18/10/bear-1283347_1280.jpg",
+		ID:             2,
+		PlayURL:        "https://www.w3schools.com/html/movie.mp4",
+		Title:          "哈哈哈哈哈哈哈",
+		FavouriteCount: 0,
+		CreateTime:     time.Time{},
+		UpdateTime:     time.Time{},
+		IsFavorite:     false,
+	},
+}
+
+// Feed same demo video list for every request
+func FeedDemo(c *gin.Context) {
+	c.JSON(http.StatusOK, FeedResponse{
+		Response:  Response{StatusCode: 0},
+		VideoList: DemoVideos,
+		NextTime:  time.Now().Unix(),
+	})
+}
+
 func GetFeed(c *gin.Context) {
 	latest_time := c.Query("latest_time")
 	token := c.Query("token")
@@ -65,30 +99,6 @@ func GetFeed(c *gin.Context) {
 	c.JSON(http.StatusOK, respFeed)
 }
 
-// 查询用户投稿视频
 func GetUserVideo(c *gin.Context) {
-	token := c.Query("token")
-	user_id := c.Query("user_id")
-	if len(token) == 0 {
-		c.JSON(401, dto.BuildUserFeed(1001, "参数无效", nil))
-		return
-	}
-	u_id, err := middleware.VerifyToken(token)
-	if err != nil {
-		c.JSON(401, dto.BuildUserFeed(1001, "暂无权限", nil))
-		return
-	}
-	target_u_id, err := strconv.Atoi(user_id)
-	if err != nil {
-		c.JSON(401, dto.BuildUserFeed(1001, "暂无权限", nil))
-		return
-	}
-	my_user := &models.User{ID: u_id}
-	target_user := &models.User{ID: int64(target_u_id)}
-	videos, err := dao.GetVideoByUser(*target_user)
-	for _, v := range videos {
-		v.Author.IsFollow = dao.GetUserFollow(my_user, target_user)
-		v.IsFavorite = dao.GetFavourite(my_user, &v)
-	}
-	c.JSON(200, dto.BuildUserFeed(6000, "查询成功", videos))
+
 }
