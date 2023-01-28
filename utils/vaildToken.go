@@ -7,7 +7,7 @@ import "titok_v1/models"
 */
 
 // 根据token获取用户
-func GetUser(token string) (models.User, error) {
+func GetUser(token string) (*models.User, error) {
 	return nil, nil
 }
 

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -45,8 +46,9 @@ func GetFeed(c *gin.Context) {
 	if utils.VaildToken(token) { // 有上传token,并且为合法token
 		// 关注
 		for _, v := range videos {
-			// 解析token获取用户，再比视频作者，用户是否是粉丝
-			v.Is_favorite = dao.GetFavourite()
+			fmt.Println(v)
+			// 解析token获取用户，再对比视频作者，用户是否是粉丝
+			//v.Is_favorite = dao.GetFavourite()
 		}
 		return
 	}

@@ -2,8 +2,8 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
-	"titokl_v1/controllers"
-	"titokl_v1/middleware"
+	"titok_v1/controllers"
+	"titok_v1/middleware"
 )
 
 func InitRouter(r *gin.Engine) *gin.Engine {

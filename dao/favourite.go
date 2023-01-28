@@ -5,12 +5,12 @@ import (
 	"titok_v1/models"
 )
 
-// 获取用户的关注信息
-func GetFavourite(user models.User, to_User models.User) (bool) {
+// 获取用户是否点赞
+func GetFavourite(user *models.User, video *models.Video) bool {
 	var favourite models.Favourite
 	err := common.GetDB().
-		Where("user_id = ? and to_user_id = ? and is_follow = 1").
-		First(favourite).Error
+		Where("user_id = ? and video_id = ? and is_favourite = 1", user.ID, video.ID).
+		First(&favourite).Error
 	if err != nil {
 		return false
 	}
@@ -18,5 +18,4 @@ func GetFavourite(user models.User, to_User models.User) (bool) {
 		return false
 	}
 	return true
-
 }
