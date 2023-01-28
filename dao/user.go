@@ -1,14 +1,14 @@
 package dao
 
 import (
-	"fmt"
 	"titok_v1/common"
 	"titok_v1/models"
 )
 
-func GetUser() (*models.User, error) {
+func GetUser(username, password string) models.User {
 	var user models.User
-	common.DB.First(&user)
-	fmt.Println(user.UserName)
-	return nil, nil
+	common.DB.Table("user_tb").Where("username = ?", username).
+		Where("password = ?", password).
+		Find(&user)
+	return user
 }
