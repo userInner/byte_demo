@@ -1,4 +1,5 @@
-# byte_demo V1
+# byte_demo V1 
+## Running
 ## 请在已加入项目组环境下，执行git
 ````
 mkdir byte_demo
@@ -8,7 +9,10 @@ git checkout -b byte_demo.V1
 git remote add origin git@github.com:userInner/byte_demo.git
 git pull origin bytedemo.V1
 ````
-## Running
+## 命令规范
+### 1. 驼峰命名法
+### 2. 务必与变量内容相关
+
 <h4>common: 数据库工具</h4>
 <h4>dao: 数据库持久层</h4>
 <h4>dto: 返回前台数据</h4>

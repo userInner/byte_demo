@@ -12,8 +12,8 @@ func GetVideo(time string) ([]models.Video, error) {
 	err := common.GetDB().
 		Preload("Author").
 		Limit(30).
-		Order("create_time desc").
 		Where("create_time <= ?", time).
+		Order("create_time desc").
 		Find(&videos).Error
 	if err != nil {
 		return nil, errors.New("get video failed" + err.Error())
@@ -33,6 +33,5 @@ func GetOnVideo(user *models.User, to *models.User, t string) ([]models.Video, e
 		Limit(30).
 		Where("create_time > ?" + t).
 		Find(&videos)
- 
 	return nil, nil
 }
