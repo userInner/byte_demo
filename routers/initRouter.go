@@ -8,6 +8,13 @@ import (
 
 func InitRouter(r *gin.Engine) *gin.Engine {
 	r.Use(middleware.CORSMiddleware(), middleware.RecoveryMiddleware())
-	r.GET("/douyin/feed/", controllers.GetFeed)
+
+	douyin := r.Group("douyin")
+	{
+		// 用户相关
+		UserRoutes(douyin)
+		douyin.GET("/feed/", controllers.GetFeed)
+	}
+
 	return r
 }
