@@ -2,7 +2,6 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
-	"titok_v1/controllers"
 	"titok_v1/middleware"
 )
 
@@ -13,7 +12,8 @@ func InitRouter(r *gin.Engine) *gin.Engine {
 	{
 		// 用户相关
 		UserRoutes(douyin)
-		douyin.GET("/feed/", controllers.GetFeed)
+		// 视频
+		FeedRoutes(douyin)
 	}
 
 	return r

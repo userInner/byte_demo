@@ -1,13 +1,14 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 	"time"
 	"titok_v1/dao"
 	"titok_v1/dto"
+	"titok_v1/middleware"
+	"titok_v1/models"
 	"titok_v1/response"
 	"titok_v1/utils"
 )
@@ -44,16 +45,26 @@ func GetFeed(c *gin.Context) {
 	// 得到最新投稿时间
 	last := len(videos)
 	last_time := utils.GetTimeInt64(videos[last-1].CreateTime.String())
+	respFeed := dto.BuildFeed(last_time, http.StatusOK, "查询成功", videos)
 	// 校验token
-	if utils.VaildToken(token) { // 有上传token,并且为合法token
-		// 关注
-		for _, v := range videos {
-			fmt.Println(v)
-			// 解析token获取用户，再对比视频作者，用户是否是粉丝
-			//v.Is_favorite = dao.GetFavourite()
-		}
+	u_id, err := middleware.VerifyToken(token)
+	if err != nil { //无效token
+		c.JSON(http.StatusOK, respFeed)
 		return
 	}
-	feed := dto.BuildFeed(last_time, http.StatusOK, "查询成功", videos)
-	c.JSON(http.StatusOK, feed)
+	// 关注
+	u := &models.User{ID: u_id}
+	for k, v := range videos {
+		// 点赞
+		video_u := &models.User{ID: v.Author.ID}
+		respFeed.VideoList[k].IsFavorite = dao.GetFavourite(&models.User{ID: u_id}, &models.Video{ID: v.ID})
+
+		// 关注视频用户
+		respFeed.VideoList[k].Author.IsFollow = dao.GetUserFollow(u, video_u)
+	}
+	c.JSON(http.StatusOK, respFeed)
+}
+
+func GetUserVideo(c *gin.Context) {
+
 }

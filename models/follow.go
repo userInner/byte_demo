@@ -1,7 +1,11 @@
 package models
 
 type Follow struct {
-	ID       int64
 	UserID   int64
 	ToUserID int64
+	IsFollow int32
+}
+
+func (v Follow) TableName() string {
+	return "follow_tb"
 }

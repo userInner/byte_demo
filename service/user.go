@@ -62,8 +62,8 @@ func (user *UserService) Register(c *gin.Context) *resp.UserLoginResp {
 		Password:      utils.Md5Crypt(user.Passwd, secret),
 		FollowCount:   0,
 		FollowerCount: 0,
-		Create_time:   time.Now().Local(),
-		Update_time:   time.Now().Local(),
+		CreateTime:    time.Now().Local(),
+		UpdateTime:    time.Now().Local(),
 	}
 
 	err := dao.InsertUser(newUser)
