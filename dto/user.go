@@ -19,8 +19,10 @@ type UserInfoDto struct {
 	User       *UserDto `json:"user"`        // 用户信息
 }
 
-// BuildUserInfoDto 构建userDTO
-func (u UserInfoDto) BuildUserInfoDto(code int64, msg string, user *models.User) *UserInfoDto {
+func BuildUserDto(user *models.User) *UserDto {
+	if user == nil {
+		return nil
+	}
 	uDto := &UserDto{
 		FollowCount:   user.FollowerCount,
 		FollowerCount: user.FollowerCount,
@@ -28,9 +30,15 @@ func (u UserInfoDto) BuildUserInfoDto(code int64, msg string, user *models.User)
 		IsFollow:      false,
 		Name:          user.UserName,
 	}
+	return uDto
+}
+
+// BuildUserInfoDto 构建userDTO
+func (u UserInfoDto) BuildUserInfoDto(code int64, msg string, user *models.User) *UserInfoDto {
+
 	return &UserInfoDto{
 		StatusCode: code,
 		StatusMsg:  &msg,
-		User:       uDto,
+		User:       BuildUserDto(user),
 	}
 }

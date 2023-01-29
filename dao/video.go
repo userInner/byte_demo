@@ -33,3 +33,15 @@ func GetVideoByUser(u models.User) ([]models.Video, error) {
 	}
 	return videos, nil
 }
+
+// 获取该videoID 视频
+func GetVideoByID(video *models.Video) (*models.Video, error) {
+	err := common.GetDB().
+		Preload("Author").
+		Where("id=?", video.ID).
+		Find(video).Error
+	if err != nil {
+		return nil, errors.New("数据库错误" + err.Error())
+	}
+	return video, nil
+}

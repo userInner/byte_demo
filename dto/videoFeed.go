@@ -1,7 +1,6 @@
 package dto
 
 import (
-	"titok_v1/dao"
 	"titok_v1/models"
 )
 
@@ -18,31 +17,6 @@ type UserFeed struct {
 	StatusCode int64      `json:"status_code"` // 状态码，0-成功，其他值-失败
 	StatusMsg  *string    `json:"status_msg"`  // 返回状态描述
 	VideoList  []VideoDto `json:"video_list"`  // 用户发布的视频列表
-}
-
-func BuildFeedDto(videoList []models.Video) []VideoDto {
-	tempVideoList := make([]VideoDto, len(videoList))
-	for k, v := range videoList {
-		// 获取
-		dto := VideoDto{
-			Author: UserDto{
-				FollowCount:   v.Author.FollowCount,
-				FollowerCount: v.Author.FollowerCount,
-				ID:            v.Author.ID,
-				IsFollow:      false, // 是否关注
-				Name:          v.Author.UserName,
-			},
-			CommentCount:  dao.GetCommentCount(v),
-			CoverURL:      v.CoverURL,
-			FavoriteCount: v.FavouriteCount,
-			ID:            v.ID,
-			IsFavorite:    false,
-			PlayURL:       v.PlayURL,
-			Title:         v.Title,
-		}
-		tempVideoList[k] = dto
-	}
-	return tempVideoList
 }
 
 func BuildUserFeed(code int64, msg string, videoList []models.Video) *UserFeed {

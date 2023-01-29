@@ -18,8 +18,7 @@ const (
 )
 
 var (
-	DB  *gorm.DB
-	err error
+	DB *gorm.DB
 )
 
 // InitMysql 数据库初始化

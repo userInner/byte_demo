@@ -13,3 +13,8 @@ func GetTimeInt64(t string) int64 {
 
 	return thetime.Unix()
 }
+
+// 获取当前时间
+func GetTime() time.Time {
+	return time.Now().Local()
+}

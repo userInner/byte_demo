@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 	"titok_v1/dao"
 	"titok_v1/middleware"
@@ -82,6 +83,8 @@ func (user *UserService) Register(c *gin.Context) *resp.UserLoginResp {
 		}
 	}
 
+	// minio: 给用户建桶
+	utils.CreateBucket(c, strconv.Itoa(int(newUser.ID)))
 	return &resp.UserLoginResp{
 		StatusCode: 0,
 		StatusMsg:  "success",

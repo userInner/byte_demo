@@ -45,7 +45,7 @@ func GetFeed(c *gin.Context) {
 	// 得到最新投稿时间
 	last := len(videos)
 	last_time := utils.GetTimeInt64(videos[last-1].CreateTime.String())
-	respFeed := dto.BuildFeed(last_time, http.StatusOK, "查询成功", videos)
+	respFeed := dto.BuildFeed(last_time, 0, "查询成功", videos)
 	// 校验token
 	u_id, err := middleware.VerifyToken(token)
 	if err != nil { //无效token
@@ -90,5 +90,5 @@ func GetUserVideo(c *gin.Context) {
 		v.Author.IsFollow = dao.GetUserFollow(my_user, target_user)
 		v.IsFavorite = dao.GetFavourite(my_user, &v)
 	}
-	c.JSON(200, dto.BuildUserFeed(6000, "查询成功", videos))
+	c.JSON(200, dto.BuildUserFeed(0, "查询成功", videos))
 }
