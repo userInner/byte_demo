@@ -27,7 +27,7 @@ func GetFeed(c *gin.Context) {
 
 	if len(latest_time) != 0 { // 有上传时间戳
 		resTime, _ := strconv.Atoi(latest_time)
-		timeUnix = (int64(resTime))
+		timeUnix = int64(resTime)
 	} else { // 无上传时间戳
 		timeUnix = time.Now().Unix()
 	}
