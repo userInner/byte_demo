@@ -5,13 +5,10 @@ import (
 	"titok_v1/controllers"
 )
 
-func FeedRoutes(r *gin.RouterGroup) {
-	feed := r.Group("feed")
+func VideoRoutes(r *gin.RouterGroup) {
+	publish := r.Group("publish")
 	{
-		feed.GET("", controllers.GetFeed)
-		publish := feed.Group("publish")
-		{
-			publish.GET("/list/", controllers.GetUserVideo)
-		}
+		publish.GET("/list/", controllers.GetUserVideo)
 	}
+
 }

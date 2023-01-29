@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -26,19 +27,18 @@ type UserService struct {
 	Passwd string `form:"password" json:"password"`
 }
 
-func (u *UserService) Login(c *gin.Context) *resp.UserLoginResp {
+func (u *UserService) Login(c *gin.Context) (*resp.UserLoginResp, error) {
 	u.Passwd = utils.Md5Crypt(u.Passwd, secret)
 	if !checkUser(u.Name, u.Passwd) {
 		log.Println("checkUser(u.Name, u.Passwd) not correct")
-		resp.Fail(c, nil, ErrUsername)
-		return nil
+		return nil, errors.New(ErrUsername)
 	}
 
 	user := dao.GetUser(u.Name, u.Passwd)
 	token, err := middleware.GenToken(user.ID, user.UserName)
 	if err != nil {
-		resp.Fail(c, nil, ErrServerInternal)
-		return nil
+		log.Println(err)
+		return nil, err
 	}
 
 	return &resp.UserLoginResp{
@@ -46,7 +46,7 @@ func (u *UserService) Login(c *gin.Context) *resp.UserLoginResp {
 		StatusMsg:  "success",
 		UserId:     user.ID,
 		Token:      token,
-	}
+	}, nil
 
 }
 
