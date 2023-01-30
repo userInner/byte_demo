@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/minio/minio-go/v7"
 	"log"
 	"mime/multipart"
@@ -47,7 +48,7 @@ func UploadUserVideo(c *gin.Context, modelVideo *models.Video, fileName string, 
 	}
 
 	defer src.Close()
-	_, err = common.GetMinio().PutObject(c, bucketName, fileName+".mp4", src, -1, minio.PutObjectOptions{ContentType: application})
+	_, err = common.GetMinio().PutObject(c, bucketName, uuid.New().String()+fileName+".mp4", src, -1, minio.PutObjectOptions{ContentType: application})
 	if err != nil {
 		return err
 	}
@@ -65,19 +66,20 @@ func UploadUserVideo(c *gin.Context, modelVideo *models.Video, fileName string, 
 	}
 
 	// 上传封面
+	coverUrl := uuid.New().String()
 	coverReader := bytes.NewReader(coverData)
-	_, err = common.GetMinio().PutObject(c, bucketName, fileName+".jpep", coverReader, -1, minio.PutObjectOptions{ContentType: "image/jpeg"})
+	_, err = common.GetMinio().PutObject(c, bucketName, coverUrl+".jpeg", coverReader, -1, minio.PutObjectOptions{ContentType: "image/jpeg"})
 
 	if err != nil {
 		return errors.New("minio上传失败" + err.Error())
 	}
-	coverUrl, err := GetMinioUrl(c, fileName+".jpeg", 0)
+	coverURL, err := GetMinioUrl(c, coverUrl+".jpeg", 0)
 	if err != nil {
 		return errors.New("minio获取url失败" + err.Error())
 	}
-	coverURL := strings.Split(coverUrl.String(), "?")[0]
+	CoverURL := strings.Split(coverURL.String(), "?")[0]
 	modelVideo.PlayURL = playUrl
-	modelVideo.CoverURL = coverURL
+	modelVideo.CoverURL = CoverURL
 
 	return dao.CreateVideo(modelVideo)
 }
