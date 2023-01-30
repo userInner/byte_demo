@@ -57,7 +57,7 @@ func GetFeed(c *gin.Context) {
 	for k, v := range videos {
 		// 点赞
 		video_u := &models.User{ID: v.Author.ID}
-		respFeed.VideoList[k].IsFavorite = dao.GetFavourite(&models.User{ID: u_id}, &models.Video{ID: v.ID})
+		respFeed.VideoList[k].IsFavorite, _ = dao.GetFavourite(&models.User{ID: u_id}, &models.Video{ID: v.ID})
 
 		// 关注视频用户
 		respFeed.VideoList[k].Author.IsFollow = dao.GetUserFollow(u, video_u)
@@ -88,7 +88,7 @@ func GetUserVideo(c *gin.Context) {
 	videos, err := dao.GetVideoByUser(*target_user)
 	for _, v := range videos {
 		v.Author.IsFollow = dao.GetUserFollow(my_user, target_user)
-		v.IsFavorite = dao.GetFavourite(my_user, &v)
+		v.IsFavorite, _ = dao.GetFavourite(my_user, &v)
 	}
 	c.JSON(200, dto.BuildUserFeed(0, "查询成功", videos))
 }
