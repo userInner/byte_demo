@@ -19,6 +19,7 @@ const (
 	Pre         = "minio"
 	suf         = ".mp4"
 	application = "video/mpeg4"
+	bucketName  = "minio8"
 )
 
 func CreateBucket(c *gin.Context, user_id string) bool {
@@ -36,7 +37,7 @@ func CreateBucket(c *gin.Context, user_id string) bool {
 }
 
 // 上传
-func UploadUserVideo(c *gin.Context, modelVideo *models.Video, bucketName, fileName string, video *multipart.FileHeader) error {
+func UploadUserVideo(c *gin.Context, modelVideo *models.Video, fileName string, video *multipart.FileHeader) error {
 	if video == nil {
 		return errors.New("upload文件打开错误")
 	}
@@ -51,7 +52,7 @@ func UploadUserVideo(c *gin.Context, modelVideo *models.Video, bucketName, fileN
 		return err
 	}
 	// 截图视频URL
-	url, err := GetMinioUrl(c, bucketName, fileName+".mp4", 0)
+	url, err := GetMinioUrl(c, fileName+".mp4", 0)
 	playUrl := strings.Split(url.String(), "?")[0]
 	if err != nil {
 		return errors.New("获取VideoURl失败" + err.Error())
@@ -70,7 +71,7 @@ func UploadUserVideo(c *gin.Context, modelVideo *models.Video, bucketName, fileN
 	if err != nil {
 		return errors.New("minio上传失败" + err.Error())
 	}
-	coverUrl, err := GetMinioUrl(c, bucketName, fileName+".jpeg", 0)
+	coverUrl, err := GetMinioUrl(c, fileName+".jpeg", 0)
 	if err != nil {
 		return errors.New("minio获取url失败" + err.Error())
 	}
@@ -81,7 +82,7 @@ func UploadUserVideo(c *gin.Context, modelVideo *models.Video, bucketName, fileN
 	return dao.CreateVideo(modelVideo)
 }
 
-func GetMinioUrl(c *gin.Context, bucketName string, fileName string, expires time.Duration) (*url.URL, error) {
+func GetMinioUrl(c *gin.Context, fileName string, expires time.Duration) (*url.URL, error) {
 	reqParam := make(url.Values)
 	if expires <= 0 {
 		expires = time.Second * 60 * 60 * 24
