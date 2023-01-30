@@ -54,7 +54,7 @@ func PublishVideoByUser(c *gin.Context) {
 		Title:      publishForm.Title,
 		CreateTime: time.Now().Local(),
 		UpdateTime: time.Now().Local(),
-	}, utils.Pre+strconv.Itoa(int(u_id)), fileName, publishForm.Data)
+	}, fileName, publishForm.Data)
 
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, dto.BuildPublishDto("1001", "文件传输错误"+err.Error()))
