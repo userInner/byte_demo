@@ -9,5 +9,8 @@ func PublishRouters(r *gin.RouterGroup) {
 	publish := r.Group("publish")
 	{
 		publish.POST("/action/", controllers.PublishVideoByUser)
+
+		publish.GET("/list/", controllers.GetUserVideo)
+
 	}
 }
