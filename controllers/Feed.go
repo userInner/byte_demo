@@ -41,11 +41,12 @@ func GetFeed(c *gin.Context) {
 		}, "3001")
 		return
 	}
-
 	// 得到最新投稿时间
 	last := len(videos)
 	last_time := utils.GetTimeInt64(videos[last-1].CreateTime.String())
+
 	respFeed := dto.BuildFeed(last_time, 0, "查询成功", videos)
+
 	// 校验token
 	u_id, err := middleware.VerifyToken(token)
 	if err != nil { //无效token

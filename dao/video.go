@@ -12,7 +12,7 @@ func GetVideo(time string) ([]models.Video, error) {
 	err := common.GetDB().
 		Preload("Author").
 		Limit(30).
-		Where("create_time <= ?", time).
+		Where("create_time >= ?", time).
 		Order("create_time desc").
 		Find(&videos).Error
 	if err != nil {

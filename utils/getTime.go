@@ -3,14 +3,13 @@ package utils
 import "time"
 
 const (
-	OrmatTimeStr = "2017-04-11 13:33:37"
+	OrmatTimeStr = "2006-01-02 15:04:05"
 )
 
 // 日期时间 转化为时间戳
 func GetTimeInt64(t string) int64 {
 	local, _ := time.LoadLocation("Local")
 	thetime, _ := time.ParseInLocation(OrmatTimeStr, t, local)
-
 	return thetime.Unix()
 }
 
