@@ -47,13 +47,14 @@ func UploadUserVideo(c *gin.Context, modelVideo *models.Video, fileName string, 
 		return errors.New("upload文件打开错误" + err.Error())
 	}
 
+	uuidPlayUrl := uuid.New().String()
 	defer src.Close()
-	_, err = common.GetMinio().PutObject(c, bucketName, uuid.New().String()+".mp4", src, -1, minio.PutObjectOptions{ContentType: application})
+	_, err = common.GetMinio().PutObject(c, bucketName, uuidPlayUrl+".mp4", src, -1, minio.PutObjectOptions{ContentType: application})
 	if err != nil {
 		return err
 	}
 	// 截图视频URL
-	url, err := GetMinioUrl(c, fileName+".mp4", 0)
+	url, err := GetMinioUrl(c, uuidPlayUrl+".mp4", 0)
 	playUrl := strings.Split(url.String(), "?")[0]
 	if err != nil {
 		return errors.New("获取VideoURl失败" + err.Error())
