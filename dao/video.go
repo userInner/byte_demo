@@ -12,29 +12,50 @@ func GetVideo(time string) ([]models.Video, error) {
 	err := common.GetDB().
 		Preload("Author").
 		Limit(30).
-		Where("create_time <= ?", time).
+		Where("create_time >= ?", time).
 		Order("create_time desc").
 		Find(&videos).Error
 	if err != nil {
-		return nil, errors.New("get video failed")
+		return nil, errors.New("get video failed" + err.Error())
 	}
 	return videos, nil
 }
 
-// 获取登录状态的video
-// user 代表本身
-// to 所关注的用户
-func GetOnVideo(user *models.User, to *models.User, time string) ([]models.Video, error) {
-	// 查询 点赞状态 是否关注
+// 获取用户所有投稿视频
+func GetVideoByUser(u models.User) ([]models.Video, error) {
 	var videos []models.Video
-	common.GetDB().
-		Preload("User").
-		Order("create_time desc").
-		Limit(30).
-		Where("create_time < time").
-		Preload("Favourite").
-		Where("user_id = ? and is_favourite = 1 and to_user_id = ? ").
-		Find(&videos)
+	err := common.GetDB().
+		Preload("Author").
+		Where("author_id=?", u.ID).
+		Find(&videos).Error
+	if err != nil {
+		return nil, errors.New("数据库错误" + err.Error())
+	}
+	return videos, nil
+}
 
-	return nil, nil
+// 获取该videoID 视频
+func GetVideoByID(video *models.Video) (*models.Video, error) {
+	if video == nil {
+		return nil, errors.New("nil")
+	}
+	err := common.GetDB().
+		Preload("Author").
+		Where("id=?", video.ID).
+		Find(video).Error
+	if err != nil {
+		return nil, errors.New("数据库错误" + err.Error())
+	}
+	return video, nil
+}
+
+func CreateVideo(video *models.Video) error {
+	if video == nil {
+		return errors.New("nil pointer")
+	}
+	err := common.GetDB().Create(video).Error
+	if err != nil {
+		return errors.New("数据库错误" + err.Error())
+	}
+	return nil
 }
