@@ -54,7 +54,7 @@ func UserLogin(c *gin.Context) {
 		return
 	}
 
-	res, _ := userService.Login(c)
+	res := userService.Login(c)
 	c.JSON(http.StatusOK, res)
 }
 
