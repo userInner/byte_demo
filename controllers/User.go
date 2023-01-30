@@ -2,44 +2,112 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
+	"log"
+	"net/http"
 	"strconv"
 	"titok_v1/dao"
 	"titok_v1/dto"
+	"titok_v1/middleware"
 	"titok_v1/models"
+	resp "titok_v1/response"
+	"titok_v1/service"
 )
 
-/*
-获取用户信息
-获取用户的 id、昵称，
-如果实现社交部分的功能，还会返回关注数和粉丝数
+var (
+	InvalidParams = "非法用户名或密码"
+	DataError     = "数据库错误"
+	SuccessData   = "数据库查询成功"
+)
 
-请求方法 query
-请求类型 string
-请求参数 user_id 用户id，token 鉴权
+func UserRegister(c *gin.Context) {
+	//username := c.Query("username")
+	//password := c.Query("password")
+	var userService service.UserService
+	if err := c.ShouldBindQuery(&userService); err != nil {
+		log.Printf("c.ShouldBind(&userService): %s\n", err.Error())
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
 
-根据token查找用户，比对user_id用户,是否关注
-*/
-func GetUserInfo(c *gin.Context) {
-	user_id := c.Query("user_id")
-	token := c.Query("token")
-
-	// user_id 转整数
-	u_id, err := strconv.Atoi(user_id)
-	if err != nil {
-		c.JSON(404, dto.UserInfoDto{}.BuildUserInfoDto(
-			1001, "非法参数", nil,
-		))
 	}
-	// token是否有效
-	tagetUser, err := dao.GetUser(&models.User{ID: int64(u_id)})
-	if err != nil {
-		c.JSON(422, dto.UserInfoDto{}.BuildUserInfoDto(
-			3001, "查询失败", nil))
+
+	log.Printf("userService: %v\n", userService)
+	if len(userService.Name) > 32 || len(userService.Passwd) > 32 { //最长32位字符
+		resp.Fail(c, nil, InvalidParams)
 		return
 	}
-	if tagetUser.ID == 0 {
-		c.JSON(200, dto.UserInfoDto{}.BuildUserInfoDto(
-			2000, "查询成功", tagetUser))
+
+	if userService.Name == "" || userService.Passwd == "" {
+		resp.Fail(c, nil, InvalidParams)
+		return
 	}
 
+	log.Println("register...")
+	res := userService.Register(c)
+	c.JSON(http.StatusOK, res)
+}
+
+func UserLogin(c *gin.Context) {
+	var userService service.UserService
+	if err := c.ShouldBind(&userService); err != nil {
+		log.Println("UserLogin: ", userService)
+		resp.Fail(c, nil, "登录失败")
+		return
+	}
+
+	res, _ := userService.Login(c)
+	c.JSON(http.StatusOK, res)
+}
+
+/*
+参数；user_id,token
+*/
+func UserInfo(c *gin.Context) {
+	user_id := c.Query("user_id")
+	token := c.Query("token")
+	if len(user_id) == 0 {
+		c.JSON(http.StatusOK, dto.UserInfoDto{}.BuildUserInfoDto(
+			1001, InvalidParams, nil,
+		))
+		return
+	}
+	target_u_id, err := strconv.Atoi(user_id)
+	if err != nil {
+		c.JSON(http.StatusOK, dto.UserInfoDto{}.BuildUserInfoDto(
+			1001, "参数无效"+err.Error(), nil,
+		))
+		return
+	}
+	// 判断token是否有效
+	u_id, err := middleware.VerifyToken(token)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadGateway, dto.UserInfoDto{
+			1001, &InvalidParams, nil,
+		})
+		return
+	}
+	// 查询token所属用户
+	u, err := dao.GetUserByID(u_id)
+	if err != nil {
+		c.JSON(401, dto.UserInfoDto{
+			1001, &DataError, nil,
+		})
+		return
+	}
+	if u.ID == 0 {
+		c.JSON(200, dto.UserInfoDto{ // 查询成功，但是没有数据
+			1001, &SuccessData, nil,
+		})
+		return
+	}
+	// 查询用户是否关注user_id
+	respUserInfo := dto.UserInfoDto{}.BuildUserInfoDto(0, "查询成功", u)
+	target_u := &models.User{ID: int64(target_u_id)}
+	is_follow := dao.GetUserFollow(u, target_u)
+	if !is_follow {
+		c.JSON(http.StatusOK, respUserInfo)
+		return
+	}
+	//respUserInfo.User.IsFollow = dao.GetUserFollow()
+	c.JSON(http.StatusOK, respUserInfo)
 }
