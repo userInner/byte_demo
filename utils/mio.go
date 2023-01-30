@@ -48,7 +48,7 @@ func UploadUserVideo(c *gin.Context, modelVideo *models.Video, fileName string, 
 	}
 
 	defer src.Close()
-	_, err = common.GetMinio().PutObject(c, bucketName, uuid.New().String()+fileName+".mp4", src, -1, minio.PutObjectOptions{ContentType: application})
+	_, err = common.GetMinio().PutObject(c, bucketName, uuid.New().String()+".mp4", src, -1, minio.PutObjectOptions{ContentType: application})
 	if err != nil {
 		return err
 	}
