@@ -4,6 +4,8 @@ import (
 	"log"
 	"titok_v1/dao"
 	"titok_v1/models"
+
+	mapset "github.com/deckarep/golang-set"
 )
 
 type favouriteService struct {
@@ -28,9 +30,14 @@ func (f *favouriteService) FavoriteAction(userId int64, videoId int64, actionTyp
 	//首先获取用户的点赞列表
 	favouriteList, err := dao.GetFavouriteVideoListByUserId(f.user.ID)
 
-	flag := IsInArray(favouriteList)
+	//测试判断元素是否在切片中
+	targetVideoId := 0000
+
+	flag := IsInArray(favouriteList, int64(targetVideoId))
 
 	//点赞逻辑：查询列表用户是否已经点赞，如果已经点赞则不修改，如果未点赞则加入。
+
+	//这个点赞逻辑待今天讨论一下
 
 	if flag == true {
 	} else {
@@ -55,6 +62,13 @@ func GetFavouriteVideoListByUserId(userId int64) []int64 {
 }
 
 // 判断元素是否在切片中的空函数
-func IsInArray([]int64) bool {
-	return true
+
+// 准备调用Mapset库中的方法来实现这个函数但是没太搞懂
+func IsInArray(list []int64, target int64) bool {
+	temp := mapset.NewSetFromSlice([]interface{}{1, 2, 3})
+	if temp.Contains(target) {
+		return true
+	} else {
+		return false
+	}
 }
