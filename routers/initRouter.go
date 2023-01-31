@@ -20,6 +20,7 @@ func InitRouter(r *gin.Engine) *gin.Engine {
 		UserRoutes(douyin)
 		// 视频
 		FeedRoutes(douyin)
+		PublishRouters(douyin)
 		// 评论
 		CommentRouters(douyin)
 	}

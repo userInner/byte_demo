@@ -14,7 +14,7 @@ type Video struct {
 	FavouriteCount int64     `json:"favorite_count"`
 	CreateTime     time.Time `json:"create_time" gorm:"column:create_time;type:datetime"` // 创建时间
 	UpdateTime     time.Time `json:"update_time" gorm:"column:update_time;type:datetime"` // 更新时间
-	IsFavorite     bool      `json:"is_favorite"`                                         // 是否为点赞
+	IsFavorite     bool      `gorm:"-:all"`
 }
 
 func (v Video) TableName() string {
