@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 	"time"
@@ -13,6 +12,8 @@ import (
 	"titok_v1/response"
 	"titok_v1/service"
 	"titok_v1/utils"
+
+	"github.com/gin-gonic/gin"
 )
 
 var (
@@ -126,7 +127,7 @@ func CommentList(c *gin.Context) {
 	}
 
 	for k, _ := range comments {
-		comments[k].Author.IsFollow = dao.GetUserFollow(&models.User{ID: u_id}, &models.User{ID: comments[k].AuthorID})
+		comments[k].Author.IsFollow = dao.IsUserFollow(&models.User{ID: u_id}, &models.User{ID: comments[k].AuthorID})
 	}
 	fmt.Println(comments[0].Author.IsFollow)
 

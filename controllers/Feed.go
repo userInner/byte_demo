@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 	"time"
@@ -11,6 +10,8 @@ import (
 	"titok_v1/models"
 	"titok_v1/response"
 	"titok_v1/utils"
+
+	"github.com/gin-gonic/gin"
 )
 
 /*
@@ -61,7 +62,7 @@ func GetFeed(c *gin.Context) {
 		respFeed.VideoList[k].IsFavorite, _ = dao.GetFavourite(&models.User{ID: u_id}, &models.Video{ID: v.ID})
 
 		// 关注视频用户
-		respFeed.VideoList[k].Author.IsFollow = dao.GetUserFollow(u, video_u)
+		respFeed.VideoList[k].Author.IsFollow = dao.IsUserFollow(u, video_u)
 	}
 	c.JSON(http.StatusOK, respFeed)
 }
@@ -88,7 +89,7 @@ func GetUserVideo(c *gin.Context) {
 	target_user := &models.User{ID: int64(target_u_id)}
 	videos, err := dao.GetVideoByUser(*target_user)
 	for _, v := range videos {
-		v.Author.IsFollow = dao.GetUserFollow(my_user, target_user)
+		v.Author.IsFollow = dao.IsUserFollow(my_user, target_user)
 		v.IsFavorite, _ = dao.GetFavourite(my_user, &v)
 	}
 	c.JSON(200, dto.BuildUserFeed(0, "查询成功", videos))
