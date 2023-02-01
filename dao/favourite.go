@@ -5,6 +5,7 @@ import (
 	"log"
 	"titok_v1/common"
 	"titok_v1/models"
+	"gorm"
 )
 
 type Favourite struct {
@@ -27,7 +28,6 @@ func GetFavourite(u *models.User, video *models.Video) (bool, error) {
 		return false, err
 	}
 	return true, err
-
 }
 
 // DAO层通过ID查询用户赞过视频的空函数
@@ -47,12 +47,17 @@ func GetFavouriteVideoListByUserId(userId int64) ([]int64, error) {
 	//我觉得这个功能的DAO还要构思一下 近日会把文档发出来讨论
 }
 
-// 点赞功能空函数
 
-// 这里的实现 可能得取取决于Favourite表的元素 讨论定下来以后后1月31日解决
-func AddFavourite() {}
+//初步在DAO层写了通过用户ID返回点赞列表的方法
+func FavouriteAction(token string, videoId int64,actionType bool)([]int64 ,err){
+	var favouriteSet []models.Favourite
+	if result := DB.Select("video_id","is_favourite").Model(&models.Favourite{}).Where("user_id = ?", userId).Find(&favouriteSet);
+	result.Error! = nil{
+		return nil, result.Error
+	}
 
-// 取消功能空函数
-
-// 问题同上
-func CancelFavourite() {}
+	favouriteList = make([]int64, 0, len(favouriteSet))
+	for _, each := range favouriteSet{
+		favouriteList = append(favouriteSet, each.videoId)
+	}
+}
