@@ -5,8 +5,6 @@ import (
 	"log"
 	"titok_v1/dao"
 	"titok_v1/models"
-
-	mapset "github.com/deckarep/golang-set"
 )
 
 type favouriteService struct {
@@ -26,12 +24,15 @@ func (f *favouriteService) GetFavouriteStatus(userId int64, videoId int64) (bool
 }
 
 // 点赞的操作 根据传入的actionType区分是点赞和取消
-func (f *favouriteService) FavoriteAction(userId int64, videoId int64, actionType int32) (bool, error) {
+func (f *favouriteService) FavoriteAction(userId int64, videoId int64, actionType int32) (json, error) {
 
 	flag, err := GetFavouriteStatus(userId, videoId)
+	var status_msg string
+	var status_code int32
 
 	if actionType == 1 {
 		if flag == true {
+			c.JSON(http.status_code, http.status_msg)
 			return true, nil
 		} else {
 			var favourite models.favourite
@@ -39,15 +40,18 @@ func (f *favouriteService) FavoriteAction(userId int64, videoId int64, actionTyp
 			favourite.UserId = userId
 			favourite.VideoId = videoId
 			favourite.IsFavourite = true
+			c.JSON(http.status_code, http.status_msg)
 
 			if err := DB.Create(&favourite).Error; err != nil {
 				log.Printf("Insert favourite log failed :%v", err)
+				c.JSON(http.status_code, http.status_msg)
 				return false, err
 			}
 		}
 	}
 	if actionType == 0 {
 		if flag == false {
+			c.JSON(http.status_code, http.status_msg)
 			return true, nil
 		} else {
 
@@ -56,8 +60,11 @@ func (f *favouriteService) FavoriteAction(userId int64, videoId int64, actionTyp
 			favourite.VideoId = videoId
 			favourite.IsFavourite = true
 
+			//这里应该要再改一下
 			if err := DB.Where("user_id = ? and video_id = ?", userId, videoId).Delete(); err != nil {
 				log.Printf("Delete favourite log failed :%v", err)
+
+				c.JSON(http.status_code, http.status_msg)
 				return false, err
 			}
 		}
@@ -76,16 +83,4 @@ func GetFavouriteVideoListByUserId(userId int64) []int64 {
 		return err
 	}
 	return favouriteList
-}
-
-// 判断元素是否在切片中的空函数
-
-// 准备调用Mapset库中的方法来实现这个函数但是没太搞懂
-func IsInArray(list []int64, target int64) bool {
-	temp := mapset.NewSetFromSlice([]interface{}{1, 2, 3})
-	if temp.Contains(target) {
-		return true
-	} else {
-		return false
-	}
 }
