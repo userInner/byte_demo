@@ -1,0 +1,108 @@
+按类分类的项目函数文档：
+
+
+
+
+===== DAO层 =====
+DAO层comment.go
+
+func GetCommentCount(video models.Video) int64
+输入videoId，查询数据库，统计特定videoId下的评论数。返回特定videoId下的评论总数。
+
+func InsertComment(comment *models.Comment) (*models.Comment, err)
+插入评论，若成功插入则返回评论内容和一个空错误。
+
+func GetCommentIsExist(comment *models.Comment) (bool,error)
+根据AuthorID, VideoID,commentID 判断此条评论是否存在，如果是返回true和一个空错误，如果不是返回false和一个空错误，如果出错，返回false和err。
+
+func DeleteComment(comment *models.Comment)(bool, error)
+根据传入的Comment实例，删除对应的评论。如果成功，返回true，nil;如果失败，情况一：对应评论不存在，返回false,nil。情况二：GetCommentIsExist函数执行失败，返回false,error
+情况三：Delete方法执行失败，返回false，nil.
+
+func GetCommentByVideoID(video *models.Video)([]models.Comment,error)
+根据输入的Video实例，返回一个由Comment实例组成的切片。若失败则返回nil。
+
+----
+
+DAO层favourite.go
+
+func GetFavourite(u *models.User, video *models.Video) (bool, error)
+输入userId videoId返回特定用户对特定视频的点赞状态。true代表已经点赞，false代表未点赞。
+
+func GetFavouriteVideoListByUserId(userId int64) ([]int64, error)
+根据输入的userId返回一个int64切片，其中包含该userId全部点赞过的videoId。如果成功执行则返回目标切片和一个空错误，如果失败则返回nil和一个对应的错误。
+
+----
+
+DAO层follow.go
+
+func IsUserFollow(u *model.Users, to_user *models.User) bool
+根据输入的User实例返回指定用户是否关注特定用户。如果关注则返回true,如果未关注则额返回false,如果函数执行失败则返回false,且在日志中打印一个Error。
+
+func FollowUser(u *models.Users, to_user *models.User)
+根据输入的User实体，向数据库 点赞关系表中 写入一条点赞数据，表示UserA关注了UserB。
+
+func FollowTB(u *models.User, to_user *models.User)(user, []models.User)
+根据输入User实体，返回一个关注列表User实例的切片。
+
+func FollowersTB(u *models.User, to_user *models.User)(user, []models.User)
+根据输入User实体，返回一个粉丝列表User实例的切片。
+
+---
+
+DAO层user_tb.go
+
+func IsExistUser(username string) bool
+根据输入username，查询数据库返回该用户是否存在。如果不存在则返回true，如果存在则返回false // ? 感觉有点问题
+
+func InsertUser(newUser *models.User) error
+根据输入User的实体，向数据库插入这个用户的记录，如果失败则返回err，如果成功则返回nil
+
+---
+
+DAO层user.go
+
+func GetUser(username, password string) models.User
+根据输入的username, password返回一个封装好的User实例。
+
+func GetUserByID(user_id int64)(*model.User, error)
+根据输入的user_id返回一个指向包含这个user_id的User实例和一个error。如果成功则返回这个实例和nil，如果失败则返回nil和日志中写入一条新错误。
+
+---
+
+DAO层video.go
+
+func GetVideo(time string)([]models.Video, error)
+根据输入时间，按投稿时间倒序返回视频列表（Video实例的切片）。如果成功则返回这个切片，和nil，如果失败则返回nil且在日志中写入一条新错误。
+
+func GetVideoByUser(u models.User)([]models.Video, error)
+根据输入的User实例，返回一个包含该用户全部投稿视频的切片和一个error.如果成功则返回该切片和nil，如果失败则返回nil，且在日志中写入一条新错误。
+
+func GetVideoByID(video *models.Video)(*models.Video, error) //这个是不是有点问题？ 为什么输入video实例返回video实例？
+
+func CreateVideo(video *models.Video) error
+输入一个video实例，在数据库对应表格写入包含该video的记录。如果成功，则返回nil。如果失败，情况一：输入实体未空，日志中新增一条空指针错误。情况二：数据库错误，日志中新增一条对应错误。
+
+
+
+===== DTO层 =====
+
+comment.go
+
+
+
+
+
+
+
+
+
+====
+
+Service层favourite.go
+
+func (f *favouriteService) GetFavouriteStatus(userId int64, videoId int64) (bool, error)
+输入userId videoId获取特定用户对特定视频的点赞状态。true代表已经点赞，false代表未点赞。
+
+func (f *favouriteService) FavoriteAction(userId int64, videoId int64, actionType int32) (bool, error)
+输入userId videoId actiontype决定是否是点赞还是消赞。actiontype == 0 代表小赞，1代表点赞。
