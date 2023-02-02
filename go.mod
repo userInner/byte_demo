@@ -5,9 +5,19 @@ go 1.19
 require (
 	github.com/gin-gonic/gin v1.8.2
 	github.com/golang-jwt/jwt/v4 v4.4.3
+<<<<<<< HEAD
 	github.com/google/uuid v1.3.0
 	github.com/minio/minio-go/v7 v7.0.47
 	github.com/u2takey/ffmpeg-go v0.4.1
+=======
+<<<<<<< HEAD
+	github.com/google/uuid v1.3.0
+	github.com/minio/minio-go/v7 v7.0.47
+	github.com/u2takey/ffmpeg-go v0.4.1
+=======
+	github.com/minio/minio-go/v7 v7.0.47
+>>>>>>> f8cf4134ce7d820165a45d4a4f9376ba60ffd499
+>>>>>>> b2cb668523580da494ed0f502e9f763dc42b5086
 	gorm.io/driver/mysql v1.4.5
 	gorm.io/gorm v1.24.3
 )

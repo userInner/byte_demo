@@ -30,6 +30,7 @@ func init() {
 	}
 
 	// // 表都已经创建好了，所以不用执行以下代码
+<<<<<<< HEAD
 	// if err := InitUserTable(); err != nil {
 	// 	panic(err)
 	// }
@@ -51,6 +52,29 @@ func init() {
 	// if err := InitMessageTable(); err != nil {
 	// 	panic(err)
 	// }
+=======
+	if err := InitUserTable(); err != nil {
+		panic(err)
+	}
+	if err := InitVideoTable(); err != nil {
+		panic(err)
+	}
+	if err := InitFavTable(); err != nil {
+		panic(err)
+	}
+	if err := InitFollowTable(); err != nil {
+		panic(err)
+	}
+	if err := InitCommentTable(); err != nil {
+		panic(err)
+	}
+	if err := InitFriendsTable(); err != nil {
+		panic(err)
+	}
+	if err := InitMessageTable(); err != nil {
+		panic(err)
+	}
+>>>>>>> b2cb668523580da494ed0f502e9f763dc42b5086
 
 	log.Println("The database is initialized successful.")
 }

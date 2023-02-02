@@ -1,9 +1,12 @@
 package service
 
 import (
+	"gorm"
 	"log"
 	"titok_v1/dao"
 	"titok_v1/models"
+
+	mapset "github.com/deckarep/golang-set"
 )
 
 type favouriteService struct {
@@ -25,36 +28,64 @@ func (f *favouriteService) GetFavouriteStatus(userId int64, videoId int64) (bool
 // 点赞的操作 根据传入的actionType区分是点赞和取消
 func (f *favouriteService) FavoriteAction(userId int64, videoId int64, actionType int32) (bool, error) {
 
-	//首先获取用户的点赞列表
-	favouriteList, err := dao.GetFavouriteVideoListByUserId(f.user.ID)
+	flag, err := GetFavouriteStatus(userId, videoId)
 
-	flag := IsInArray(favouriteList)
+	if actionType == 1 {
+		if flag == true {
+			return true, nil
+		} else {
+			var favourite models.favourite
+
+			favourite.UserId = userId
+			favourite.VideoId = videoId
+			favourite.IsFavourite = true
+
+			if err := DB.Create(&favourite).Error; err != nil {
+				log.Printf("Insert favourite log failed :%v", err)
+				return false, err
+			}
+		}
+	}
+	if actionType == 0 {
+		if flag == false {
+			return true, nil
+		} else {
+
+			var favourite models.favourite
+			favourite.UserId = userId
+			favourite.VideoId = videoId
+			favourite.IsFavourite = true
+
+			if err := DB.Where("user_id = ? and video_id = ?", userId, videoId).Delete(); err != nil {
+				log.Printf("Delete favourite log failed :%v", err)
+				return false, err
+			}
+		}
+	}
+
+	return true, nil //默认返回
 
 	//点赞逻辑：查询列表用户是否已经点赞，如果已经点赞则不修改，如果未点赞则加入。
-
-	if flag == true {
-	} else {
-	}
-
-	//取消逻辑：查询列表用户是否已经点赞，如果未点赞则不修改，如果已点赞则取消。
-	if flag == true {
-	} else {
-	}
-	return true, err
-
 }
 
-// 根据用用户ID获取点赞列表的空函数
+// 在DAO层实现了 这里直接调用DAO层的函数
 func GetFavouriteVideoListByUserId(userId int64) []int64 {
 	favouriteList, err := dao.GetFavouriteVideoListByUserId(userId)
 	if err != nil {
-		return nil
+		log.Printf("Get Favouritee Video List By UserID failed :%v", err)
+		return err
 	}
-
 	return favouriteList
 }
 
 // 判断元素是否在切片中的空函数
-func IsInArray([]int64) bool {
-	return true
+
+// 准备调用Mapset库中的方法来实现这个函数但是没太搞懂
+func IsInArray(list []int64, target int64) bool {
+	temp := mapset.NewSetFromSlice([]interface{}{1, 2, 3})
+	if temp.Contains(target) {
+		return true
+	} else {
+		return false
+	}
 }

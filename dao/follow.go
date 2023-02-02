@@ -29,8 +29,11 @@ func FollowUser(u *models.User, to_user *models.User) {
 		"ToUserID": to_user.ID,
 		"IsFollow": true,
 	})
+<<<<<<< HEAD
 	u.FollowCount++
 	to_user.FollowerCount++
+=======
+>>>>>>> b2cb668523580da494ed0f502e9f763dc42b5086
 }
 
 // 返回关注列表
