@@ -14,8 +14,7 @@ type Favourite struct {
 	IsFavourite int64 // 0为关注 1为不关注
 }
 
-// 点赞
-// 由于业务层需要增加一个error返回值
+// 获取点赞状态
 func GetFavourite(u *models.User, video *models.Video) (bool, error) {
 	fav := &models.Favourite{} //favorite
 	err := common.GetDB().
@@ -30,7 +29,6 @@ func GetFavourite(u *models.User, video *models.Video) (bool, error) {
 	return true, err
 }
 
-// DAO层通过ID查询用户赞过视频的空函数
 
 // 这里需要数据库的.sql 在本地试一试  Favourite的表是什么样的？
 func GetFavouriteVideoListByUserId(userId int64) ([]int64, error) {
@@ -49,7 +47,7 @@ func GetFavouriteVideoListByUserId(userId int64) ([]int64, error) {
 
 
 //初步在DAO层写了通过用户ID返回点赞列表的方法
-func FavouriteAction(token string, videoId int64,actionType bool)([]int64 ,err){
+func FavouriteAction(token string, videoId int64,actionType int32)([]int64 ,err){
 	var favouriteSet []models.Favourite
 	if result := DB.Select("video_id","is_favourite").Model(&models.Favourite{}).Where("user_id = ?", userId).Find(&favouriteSet);
 	result.Error! = nil{
