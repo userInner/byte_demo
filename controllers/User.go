@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"strconv"
@@ -11,6 +10,8 @@ import (
 	"titok_v1/models"
 	resp "titok_v1/response"
 	"titok_v1/service"
+
+	"github.com/gin-gonic/gin"
 )
 
 var (
@@ -103,7 +104,7 @@ func UserInfo(c *gin.Context) {
 	// 查询用户是否关注user_id
 	respUserInfo := dto.UserInfoDto{}.BuildUserInfoDto(0, "查询成功", u)
 	target_u := &models.User{ID: int64(target_u_id)}
-	is_follow := dao.GetUserFollow(u, target_u)
+	is_follow := dao.IsUserFollow(u, target_u)
 	if !is_follow {
 		c.JSON(http.StatusOK, respUserInfo)
 		return

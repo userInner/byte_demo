@@ -1,9 +1,10 @@
 package routers
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"titok_v1/middleware"
+
+	"github.com/gin-gonic/gin"
 )
 
 func InitRouter(r *gin.Engine) *gin.Engine {

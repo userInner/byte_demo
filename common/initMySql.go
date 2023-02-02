@@ -2,10 +2,11 @@ package common
 
 import (
 	"fmt"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 	"log"
 	"titok_v1/models"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 const (
@@ -15,7 +16,7 @@ const (
 	database   = "douyinApp"
 	username   = "root"
 	password   = "gegege"
-	charset    = "utf8"
+	charset    = "utf8mb4"
 )
 
 var (
@@ -23,27 +24,33 @@ var (
 )
 
 // 所有DB相关的初始化操作放在这里
-func Init() {
+func init() {
 	if err := InitMysql(); err != nil {
 		panic(err)
 	}
 
-	// 因为之前建表使用了外键，修改表会失败，暂时不管吧
-	//if err := InitUserTable(); err != nil {
-	//	panic(err)
-	//}
-	//if err := InitVideoTable(); err != nil {
-	//	panic(err)
-	//}
-	//if err := InitFavTable(); err != nil {
-	//	panic(err)
-	//}
-	//if err := InitFollowTable(); err != nil {
-	//	panic(err)
-	//}
-	//if err := InitCommentTable(); err != nil {
-	//	panic(err)
-	//}
+	// // 表都已经创建好了，所以不用执行以下代码
+	// if err := InitUserTable(); err != nil {
+	// 	panic(err)
+	// }
+	// if err := InitVideoTable(); err != nil {
+	// 	panic(err)
+	// }
+	// if err := InitFavTable(); err != nil {
+	// 	panic(err)
+	// }
+	// if err := InitFollowTable(); err != nil {
+	// 	panic(err)
+	// }
+	// if err := InitCommentTable(); err != nil {
+	// 	panic(err)
+	// }
+	// if err := InitFriendsTable(); err != nil {
+	// 	panic(err)
+	// }
+	// if err := InitMessageTable(); err != nil {
+	// 	panic(err)
+	// }
 
 	log.Println("The database is initialized successful.")
 }
@@ -66,7 +73,7 @@ func InitMysql() error {
 		DontSupportRenameColumn:   true,
 		SkipInitializeWithVersion: false,
 	}), &gorm.Config{})
-
+	fmt.Println("database connect success!")
 	return err
 }
 
@@ -92,6 +99,16 @@ func InitFollowTable() error {
 
 func InitCommentTable() error {
 	err := GetDB().AutoMigrate(&models.Comment{})
+	return err
+}
+
+func InitFriendsTable() error {
+	err := GetDB().AutoMigrate(&models.Friends{})
+	return err
+}
+
+func InitMessageTable() error {
+	err := GetDB().AutoMigrate(&models.Message{})
 	return err
 }
 

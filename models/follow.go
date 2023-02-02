@@ -1,9 +1,12 @@
 package models
 
 type Follow struct {
-	UserID   int64
-	ToUserID int64
-	IsFollow int32
+	ID        uint64
+	UserID    uint64
+	User_tb   User `gorm:"ForeignKey:UserID;AssociationForeignKey:ID"`
+	ToUserID  uint64
+	ToUser_tb User `gorm:"ForeignKey:ToUserID;AssociationForeignKey:ID"`
+	IsFollow  bool
 }
 
 func (v Follow) TableName() string {
