@@ -10,7 +10,7 @@ func GetCommentCount(video models.Video) int64
 输入videoId，查询数据库，统计特定videoId下的评论数。返回特定videoId下的评论总数。
 
 func InsertComment(comment *models.Comment) (*models.Comment, err)
-插入评论，若成功插入则返回评论内容和一个空错误。
+插入评论，若成功插入则返回一个指向该评论的指针和一个空错误。
 
 func GetCommentIsExist(comment *models.Comment) (bool,error)
 根据AuthorID, VideoID,commentID 判断此条评论是否存在，如果是返回true和一个空错误，如果不是返回false和一个空错误，如果出错，返回false和err。
@@ -66,7 +66,7 @@ func GetUser(username, password string) models.User
 根据输入的username, password返回一个封装好的User实例。
 
 func GetUserByID(user_id int64)(*model.User, error)
-根据输入的user_id返回一个指向包含这个user_id的User实例和一个error。如果成功则返回这个实例和nil，如果失败则返回nil和日志中写入一条新错误。
+根据输入的user_id返回一个指向包含这个user_id的User实例的指针和一个error。如果成功则返回这个实例和nil，如果失败则返回nil和日志中写入一条新错误。
 
 ---
 
@@ -89,6 +89,18 @@ func CreateVideo(video *models.Video) error
 
 comment.go
 
+type CommentDto Struct 封装评论内容 创建日期 ID和作者的结构体
+
+type CommentListDto struct  封装评论名单（一个CommentDto实例组成的切片） 状态码和状态信息的结构体
+
+type CommentActionDto 封装状态码 状态信息 和一个指向Comment实例的指针的结构体
+
+func BuildCommentActionDto(comment *models.Comment) *CommentDto 
+根据输入Comment实体 封装成一个CommentDto实体并返回。如果成功则返回一个指向CommentDto的指针变量，如果失败则返回nil.
+
+func BuildCommentListDto(code string, msg string, comment []models.Comment) *CommentListDto
+根据输入状态码 msg和 comment 封装成一个 CommentDto的切片，然后把这个切片封装到CommentListDto结构体中，且返回一个该结构体的地址。
+
 
 
 
@@ -105,4 +117,6 @@ func (f *favouriteService) GetFavouriteStatus(userId int64, videoId int64) (bool
 输入userId videoId获取特定用户对特定视频的点赞状态。true代表已经点赞，false代表未点赞。
 
 func (f *favouriteService) FavoriteAction(userId int64, videoId int64, actionType int32) (bool, error)
-输入userId videoId actiontype决定是否是点赞还是消赞。actiontype == 0 代表小赞，1代表点赞。
+输入userId videoId actiontype决定是否是点赞还是消赞。actiontype == 0 代表消赞，1代表点赞。
+
+
