@@ -20,6 +20,18 @@ var (
 	InvaildMsg = "参数错误"
 )
 
+//发送消息,没写完
+func SendMessage(c *gin.Context) {
+	messageServ := &service.MessageService{}
+	err := c.ShouldBindQuery(commentServ)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, dto.BuildMessageDto(response.InvaildParameCode, InvaildMsg+err.Error(), nil))
+		return
+	}
+
+}
+
+//查看消息列表
 func MessageList(c *gin.Context) {
 	token := c.Query("token")
 	to_user_id:=c.Query("to_user_id")
@@ -46,3 +58,4 @@ func MessageList(c *gin.Context) {
 
 	c.JSON(http.StatusOK, dto.BuildCommentListDto("0", response.OKMsg, messages))
 }
+

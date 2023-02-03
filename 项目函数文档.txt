@@ -48,7 +48,27 @@ func FollowTB(u *models.User, to_user *models.User)(user, []models.User)
 func FollowersTB(u *models.User, to_user *models.User)(user, []models.User)
 根据输入User实体，返回一个粉丝列表User实例的切片。
 
----
+----
+
+DAO层friends.go
+
+func IsUserFriend(u *models.User, f *models.User) bool 
+判断输入的两个User是否互相关注，是则为好友，返回true，否则不是好友，返回false
+
+func AddFriends(u *models.User, f *models.User)
+如果输入的两个User是好友，加入好友数据库表中
+
+func FriendsTB(u *models.User, f *models.User) ([]models.User) 
+如果输入的f是u的好友，返回f的更多信息
+
+----
+
+DAO层message.go
+
+func GetMessage(a *models.User,r *models.User) ([]models.Message, error) 
+输入两个User，返回他们之间的聊天记录
+
+----
 
 DAO层user_tb.go
 

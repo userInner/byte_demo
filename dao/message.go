@@ -7,8 +7,8 @@ import (
 	"errors"
 )
 
-//获取聊天记录
-func GetMessage(a *models.User,r *models.User) ([]models.Message, error) {
+//获取聊天记录，没写完
+func GetMessageList(a *models.User,r *models.User) ([]models.Message, error) {
 	content := []models.Message{}
 	err := common.GetDB().
 		Model(&models.Message{}).
@@ -21,3 +21,7 @@ func GetMessage(a *models.User,r *models.User) ([]models.Message, error) {
 	return content,nil
 }
 
+//发送聊天记录，没写完
+func SendMessage(a *models.User,r *models.User,m *models.Message) {
+
+}
