@@ -95,7 +95,7 @@ type CommentListDto struct  封装评论名单（一个CommentDto实例组成的
 
 type CommentActionDto 封装状态码 状态信息 和一个指向Comment实例的指针的结构体
 
-func BuildCommentActionDto(comment *models.Comment) *CommentDto 
+func BuildCommentActionDto(comment *models.Comment) *CommentDto
 根据输入Comment实体 封装成一个CommentDto实体并返回。如果成功则返回一个指向CommentDto的指针变量，如果失败则返回nil.
 
 func BuildCommentListDto(code string, msg string, comment []models.Comment) *CommentListDto
@@ -118,5 +118,3 @@ func (f *favouriteService) GetFavouriteStatus(userId int64, videoId int64) (bool
 
 func (f *favouriteService) FavoriteAction(userId int64, videoId int64, actionType int32) (bool, error)
 输入userId videoId actiontype决定是否是点赞还是消赞。actiontype == 0 代表消赞，1代表点赞。
-
-

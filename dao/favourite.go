@@ -5,7 +5,7 @@ import (
 	"log"
 	"titok_v1/common"
 	"titok_v1/models"
-	"gorm"
+	// "gorm"
 )
 
 type Favourite struct {
@@ -48,7 +48,7 @@ func GetFavouriteVideoListByUserId(userId int64) ([]int64, error) {
 }
 
 
-//初步在DAO层写了通过用户ID返回点赞列表的方法
+// 初步在DAO层写了通过用户ID返回点赞列表的方法
 func FavouriteAction(token string, videoId int64,actionType bool)([]int64 ,err){
 	var favouriteSet []models.Favourite
 	if result := DB.Select("video_id","is_favourite").Model(&models.Favourite{}).Where("user_id = ?", userId).Find(&favouriteSet);

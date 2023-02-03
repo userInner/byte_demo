@@ -1,14 +1,11 @@
 package main
 
-<<<<<<< HEAD
 import (
 	"time"
 	"titok_v1/dao"
 	"titok_v1/models"
 )
 
-=======
->>>>>>> b2cb668523580da494ed0f502e9f763dc42b5086
 func main() {
 	// r := gin.Default()
 	// common.InitMysql()
@@ -18,7 +15,6 @@ func main() {
 	// if err != nil {
 	// 	panic(err)
 	// }
-<<<<<<< HEAD
 
 	var user = models.User{
 		ID:            1,
@@ -44,6 +40,4 @@ func main() {
 	// dao.InsertUser(&user)
 	// dao.InsertUser(&to_user)
 	dao.FollowUser(&user, &to_user)
-=======
->>>>>>> b2cb668523580da494ed0f502e9f763dc42b5086
 }

@@ -5,11 +5,7 @@ import (
 )
 
 type User struct {
-<<<<<<< HEAD
 	ID            uint64    `json:"id" gorm:"primary_key; column:id"`            // 用户id
-=======
-	ID            int64     `json:"id" gorm:"primary_key; column:id"`            // 用户id
->>>>>>> b2cb668523580da494ed0f502e9f763dc42b5086
 	UserName      string    `json:"name" gorm:"column:username"`                 // 用户名称
 	Password      string    `gorm:"column:password"`                             // 用户密码
 	CreateTime    time.Time `gorm:"column:create_time"`                          // 创建时间
