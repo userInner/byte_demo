@@ -5,25 +5,15 @@ go 1.19
 require (
 	github.com/gin-gonic/gin v1.8.2
 	github.com/golang-jwt/jwt/v4 v4.4.3
-<<<<<<< HEAD
 	github.com/google/uuid v1.3.0
 	github.com/minio/minio-go/v7 v7.0.47
 	github.com/u2takey/ffmpeg-go v0.4.1
-=======
-<<<<<<< HEAD
-	github.com/google/uuid v1.3.0
-	github.com/minio/minio-go/v7 v7.0.47
-	github.com/u2takey/ffmpeg-go v0.4.1
-=======
-	github.com/minio/minio-go/v7 v7.0.47
->>>>>>> f8cf4134ce7d820165a45d4a4f9376ba60ffd499
->>>>>>> b2cb668523580da494ed0f502e9f763dc42b5086
 	gorm.io/driver/mysql v1.4.5
 	gorm.io/gorm v1.24.3
 )
 
 require (
-	github.com/aws/aws-sdk-go v1.38.20 // indirect
+	github.com/aws/aws-sdk-go v1.44.192 // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
@@ -35,7 +25,7 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/klauspost/compress v1.15.9 // indirect
+	github.com/klauspost/compress v1.15.15 // indirect
 	github.com/klauspost/cpuid/v2 v2.1.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
