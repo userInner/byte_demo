@@ -1,3 +1,4 @@
+package response
 //用于 点赞相关业务逻辑的响应
 
 type FavouriteActionResp struct{
