@@ -87,26 +87,181 @@ func CreateVideo(video *models.Video) error
 
 ===== DTO层 =====
 
-comment.go
+DTO层comment.go
 
 type CommentDto Struct 封装评论内容 创建日期 ID和作者的结构体
 
-type CommentListDto struct  封装评论名单（一个CommentDto实例组成的切片） 状态码和状态信息的结构体
+type CommentListDto Struct  封装评论名单（一个CommentDto实例组成的切片） 状态码和状态信息的结构体
 
-type CommentActionDto 封装状态码 状态信息 和一个指向Comment实例的指针的结构体
+type CommentActionDto Struct 封装状态码 状态信息 和一个指向Comment实例的指针的结构体
 
-func BuildCommentActionDto(comment *models.Comment) *CommentDto
+func BuildCommentActionDto(comment *models.Comment) *CommentDto 
 根据输入Comment实体 封装成一个CommentDto实体并返回。如果成功则返回一个指向CommentDto的指针变量，如果失败则返回nil.
 
 func BuildCommentListDto(code string, msg string, comment []models.Comment) *CommentListDto
 根据输入状态码 msg和 comment 封装成一个 CommentDto的切片，然后把这个切片封装到CommentListDto结构体中，且返回一个该结构体的地址。
 
+---
+
+DTO层message.go
+
+type MessageDto Struct 封装聊天内容 内容发布日期 聊天ID的一个结构体
+
+type MessageListDto Struct 封装聊天列表 状态码 状态描述信息的结构体
+
+func BuildMessageDto(message *models.Message) *MessageDto 构造一个MessageDto结构体实例 如果成功则返回一个指向该MessageDto的指针，如果输入为空则返回nil 
+
+func BuildMessageDto(code string, msg string, message []models.Message) *MessaageListDto 
+根据输入状态码、状态描述和传入message实例，构造一个MessageListDto的实例并返回一个指向它的指针。如果传入未传入message实例则返回nil
 
 
+---
 
+DTO层publish.go
 
+type PublishDto 封装状态码 状态信息的结构体 
 
+func BuildPublishDto(code string, msg string) *PublishDto
+返回一个指向封装好的PublishDto结构体的指针
 
+---
+
+DTO层user.go
+
+type UserDto struct 一个封装关注总数，粉丝总数、用户ID、关注状态和用户名称的结构体
+
+type UserInfoDto struct 一个封装状态码、返回状态描述、用户信息的结构体
+
+func BuildUserDto(user *model.User) *UserDto 根据输入的User实例构造一个UserDto实例，成功则返回一个指向该结构体的指针。如果输入为空则返回nil。
+
+func (u UserInfoDto) BuildUserInfoDto (code int64, msg string, user *models.User) *UserInfoDto
+根据输入code,msg, user实例，返回一个封装好的UserInfoDto实例。并没有错误处理和其他返回。
+
+---
+
+DTO层Video.go
+
+type VideoDto struct 一个封装作者信息、评论数、封面URL、视频点赞数、视频ID、是否点赞、视频播放地址、视频标题的结构体。
+
+func BuildFeedDto(videoList []models.Video) []VideoDto
+根据传入的Video切片，将其中Video实例封装成VideoDto，且封装在VideoDto切片中，返回一个VideoDto切片。
+
+---
+
+DTO层videoFeed.go
+
+type Feed struct 一个封装发布最早时间、状态码、状态描述、视频列表切片的结构体
+
+type UserFeedStruct 一个封装状态码、状态描述、用户发布视频列表切片的结构体
+
+func BuildUserFeed(code int64, msg string, videoList []models.Video) *UserFeed
+将传入的状态码、状态信息、视频实例切片封装在一个UserFeed结构体中并返回一个指向这个实例的指针
+
+func BuildFeed(nextTime int64, statuscode int64, statusMsg string, videoList []models.Video) *Feed
+将传入的 nextTime、状态码、状态描述、视频实例切片封装到Feed结构体中，并返回一个指向该实例的指针
+
+===== middleware =====
+
+middleware层的Auth.go
+
+type JWTClaims struct 一个封装用户ID、用户名和token的结构体
+
+func GenToken(userid int64, userName string) (string,error)
+根据传入userid,useerName，调用jwt包生成一个注册声明且封装在一个JWTClaims实例中。根据这个注册声明和HS256加密方法调用JWT包生成一个签名token。
+若成功则返回这个token和一个nil。若失败则返回一个nil和一个err.
+
+func ParseToken(tokenString string)(*JWTClaims, error)
+调用JWT包汇中的解析方法解析传入的token，如果解析成功则返回秘文“Gegege”，如果失败// 这个OK是个什么东西？ [未完成]
+
+func VerifyToken(tokenString string)(int64, error)
+函数功能应该是根据传入tokenString进行验证，如果成功则返回这个token中包含的用户id。如果失败则返回int64(0)和一个错误。需要理解ParseToken{}这个函数。[未完成]
+
+---
+
+middleware层的Cors.go
+
+func CORSMiddleware() gin.HandlerFunc [未完成][待查]
+
+---
+
+middleware层的Recovery.go
+
+func RecoveryMiddleware() gin.HandlerFunc [未完成][待查]
+
+===== models层 =====
+
+models层的comment.go
+
+type Comment struct 一个封装ID 用户ID 用户名 视频ID 评论内容 创建日期 创建时间戳和更新时间戳的结构体
+
+func(v comment) TableName() string 一个返回"comment_tb"的静态函数
+
+---
+
+models层的favourite.go
+
+type Favourite struct 一个封装点赞关系的结构体
+
+func(v Favourite) TableName() string 一个返回“favourite_tb”的静态函数
+
+---
+
+models层的follow.go
+
+type Follow struct 一个封装关注信息的结构体 其中包含 关系ID UserID  user_tb ToUserID toUser_tb IsFollow [未完成]//这个toUser_tb是做什么的？
+
+func (v Follow) TableName() string 一个返回“follow_tb”的静态函数
+
+---
+
+models层的friends.go
+
+type Friends struct 一个封装好友信息的结构体
+
+func(v Friends) TableName() string 一个返回“friends_tb”的静态函数
+
+---
+
+models层的message.go 
+
+type Message struct一个封装用户之间消息信息的结构体
+
+func(v Message) tableName() string 一个返回“message_tb”的静态函数
+
+---
+
+models层的user.go 
+
+type User struct一个封装用户信息的结构体
+
+func(v User) TableName() string 一个返回“user_tb”的静态函数
+
+---
+models层的video.go 
+
+type Video struct 一个封装视频信息的结构体
+
+func(v Video) TableName() string 一个返回“video_tb“的静态函数
+
+===== response层 =====
+
+response层的favourite_resp.go [未完成]
+
+---
+
+response层的response.go
+
+func Response(c *gin.Context, httpStatus, code int, data gin.H, msg string) [未完成]
+
+func Success(c *gin.Context, data gin.H, msg string)[未完成]
+
+func Fail(c *gin.Context, data gin.H, msg string)[未完成]
+
+---
+
+response层的user_resp.go
+
+type UserLoginResp struct 一个封装了用户登陆返回信息的结构体
 
 
 ====
@@ -118,3 +273,5 @@ func (f *favouriteService) GetFavouriteStatus(userId int64, videoId int64) (bool
 
 func (f *favouriteService) FavoriteAction(userId int64, videoId int64, actionType int32) (bool, error)
 输入userId videoId actiontype决定是否是点赞还是消赞。actiontype == 0 代表消赞，1代表点赞。
+
+
