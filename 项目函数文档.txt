@@ -263,10 +263,48 @@ response层的user_resp.go
 
 type UserLoginResp struct 一个封装了用户登陆返回信息的结构体
 
+===== router层 =====
 
-====
+router层的commentRouters.go
 
-Service层favourite.go
+func CommentRouters(r *gin.RouterGroup)
+gin的路由分组功能[未完成]
+
+---
+
+router层的FeedRouters.go
+
+func FeedRoutes(r *gin.RouterGroup) [未完成]
+
+---
+
+router层的initRouters.go
+
+func InitRouter(r *gin.Engine) *gin.Engine
+gin里的方法还没有看[完成]
+
+---
+
+router层的PublishRouters（r *gin.RouterGroup）
+发布？[未完成]
+
+---
+
+router层的user.go
+
+func UserRoutes(r *gin.RouterGroup)
+gin里的方法没有看[未完成]
+
+
+===== Service层 =====
+
+service层的comment.go
+
+type Comment Service struct 一个封装评论相关信息的结构体。可是为什么要放在Service？
+
+---
+
+service层favourite.go
 
 func (f *favouriteService) GetFavouriteStatus(userId int64, videoId int64) (bool, error)
 输入userId videoId获取特定用户对特定视频的点赞状态。true代表已经点赞，false代表未点赞。
@@ -274,4 +312,80 @@ func (f *favouriteService) GetFavouriteStatus(userId int64, videoId int64) (bool
 func (f *favouriteService) FavoriteAction(userId int64, videoId int64, actionType int32) (bool, error)
 输入userId videoId actiontype决定是否是点赞还是消赞。actiontype == 0 代表消赞，1代表点赞。
 
+
+---
+
+service层的publish.go
+
+type PublishForm struct
+*multipart.FileHeader是做什么的？[未完成]
+
+---
+
+service层的users.go
+
+type UserServicee struct 一个封装用户登陆信息的结构体
+
+func (u *UserService) Login(c *gin.Context)(*resp.UserLoginResp, error)
+根据传入一个指向gin.Context的指针，生成一个登陆状态返回的实例并返回一个指向这个实例的指针和错误。若失败则返回一个nil且在日志中打印一条新错误。
+
+func (user *UserService) Register(c *gin.Context) *resp.UserLoginResp
+看名称应该是注册这个功能的业务逻辑。根据输入gin的上下文新建一个User实例并将对应信息插入数据库中。如果数据库中已存在本条记录则返回一个预设好的结构体实体。
+成功注册完成则生成一个返回实例并返回一个指向这个实例的指针。
+
+建桶是做什么的？
+
+func checkUser(name, password string) bool
+根据输入用户名和密码判断用户信息是否正确，如果是则返回true，不是则返回false
+
+
+===== utils层 =====
+
+utils层的GetCover.go
+
+func GetVideoCover(filePath string) ([]byte, error)
+这应该是一个调用ffmpeg包，截取视频封面的函数。
+
+---
+
+utils层的getTime.go
+
+func GetTimeInt64(t string) int64
+把日期时间转化为时间戳并返回
+
+func GetTime() time.Time
+返回当前系统时间 // 应该返回的是个时间戳？
+
+---
+
+utils层的md5.go
+
+func Md5Crypt(str string, salt ... interface{})(CryptStr string)
+
+这个salt是做什么用的？ 
+函数功能应该是将输入string通过Md5方法加密
+
+---
+
+utils层的mio.go
+
+func CreateBucket(c *gin.Context, user_id string) bool
+没有看gin 看不懂这个函数 [未完成]
+
+为什么要建桶？
+
+func UploadUserVideo(c *gin.Context, modelVideo *models.Video, fileName string, video *multipart.FileHeader) error
+这个函数应该是按照流程获取URL、截取封面并上传，额 Create Video最后返回的是一个nil啊 [未完成]
+
+func GetMinoUrl(c *gin.Context, fileName string, expires time.Duration)(*url.URL, error)
+应该是使用Minio完成对象存储之后 获取对应资源URL的函数[未完成]
+
+---
+
+utils层的VaildToken.go
+
+func GetTokenUser(token string)(*models.User, error) 返回nill和nil
+
+func VaildToken(token string) bool
+这两个方法还没有写完
 
