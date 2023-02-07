@@ -24,6 +24,8 @@ func InitRouter(r *gin.Engine) *gin.Engine {
 		PublishRouters(douyin)
 		// 评论
 		CommentRouters(douyin)
+		//聊天记录
+		MessageRouters(douyin)
 	}
 
 	return r
