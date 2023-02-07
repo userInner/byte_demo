@@ -9,7 +9,7 @@ require (
 	github.com/minio/minio-go/v7 v7.0.47
 	github.com/u2takey/ffmpeg-go v0.4.1
 	gorm.io/driver/mysql v1.4.5
-	gorm.io/gorm v1.24.3
+	gorm.io/gorm v1.24.5
 )
 
 require (

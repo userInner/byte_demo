@@ -5,7 +5,7 @@ import (
 	"log"
 	"titok_v1/common"
 	"titok_v1/models"
-	// "gorm"
+	// "gorm.io/gorm"
 )
 
 type Favourite struct {

@@ -1,10 +1,10 @@
 package models
 
 type Follow struct {
-	ID        uint64
-	UserID    uint64
+	ID        int64
+	UserID    int64
 	User_tb   User `gorm:"ForeignKey:UserID;AssociationForeignKey:ID"`
-	ToUserID  uint64
+	ToUserID  int64
 	ToUser_tb User `gorm:"ForeignKey:ToUserID;AssociationForeignKey:ID"`
 	IsFollow  bool
 }

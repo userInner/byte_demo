@@ -1,11 +1,11 @@
 package service
 
-import (
-	"gorm"
-	"log"
-	"titok_v1/dao"
-	"titok_v1/models"
-)
+// import (
+// 	// "gorm"
+// 	// "log"
+// 	"titok_v1/dao"
+// 	"titok_v1/models"
+// )
 
 type MessageService struct {
 	//Token       string `form:"token"`       // 必传：是
@@ -16,12 +16,12 @@ type MessageService struct {
 }
 
 
-//发送消息，没写完
-func SendMessage() {
+// //发送消息，没写完
+// func SendMessage() {
 	
-}
+// }
 
-//查看聊天记录，没写完
-func GetMessageListByUserID() {
+// //查看聊天记录，没写完
+// func GetMessageListByUserID() {
 
-}
+// }
