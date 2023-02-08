@@ -24,8 +24,10 @@ func InitRouter(r *gin.Engine) *gin.Engine {
 		PublishRouters(douyin)
 		// 评论
 		CommentRouters(douyin)
-		//聊天记录
+		//聊天
 		MessageRouters(douyin)
+		//交友
+		RelationRouters(douyin)
 	}
 
 	return r
