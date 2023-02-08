@@ -9,7 +9,7 @@ import (
 	"titok_v1/dto"
 	"titok_v1/middleware"
 	"titok_v1/models"
-	"titok_v1/response"
+	resp "titok_v1/response"
 	// "titok_v1/service"
 	// "titok_v1/utils"
 
@@ -23,17 +23,6 @@ import (
 // var (
 // 	InvaildMsg = "参数错误"
 // )
-
-//本核心在于形成userid和Node的映射关系
-type Node struct {
-	Conn *websocket.Conn
-	//并行转串行,
-	DataQueue chan []byte
-	GroupSets set.Interface
-}
-
-
-
 
 //查看消息列表
 func MessageList(c *gin.Context) {
@@ -59,13 +48,24 @@ func MessageList(c *gin.Context) {
 }
 
 
-//发送消息,没写完
-// func SendMessage(c *gin.Context) {
-// 	messageServ := &service.MessageService{}
-// 	err := c.ShouldBindQuery(messageServ)
-// 	if err != nil {
-// 		c.JSON(http.StatusBadRequest, dto.BuildMessageDto(response.InvaildParameCode, InvaildMsg+err.Error(), nil))
-// 		return
-// 	}
+// 发送消息,初步写完，未测试
+func SendMessage(c *gin.Context) {
+	messageServ := &service.MessageService{}
+	err := c.ShouldBindQuery(messageServ)
+	if err != nil {
+		log.Printf("c.ShouldBind(&messageServ): %s\n", err.Error())
+		c.JSON(http.StatusBadRequest, dto.BuildMessageDto(response.InvaildParameCode, InvaildMsg+err.Error(), nil))
+		return
+	}
+	log.Printf("messageServ: %v\n", messageServ)
 
-// }
+	if(messageServ.FromUserID==nil||messageServ.ToUserID==nil||messageServ.Content==""){
+		resp.Fail(c, nil, InvalidParams)
+		return
+	}
+
+	log.Println("send message...")
+	res := messageServ.SendMessage(c)
+	c.JSON(http.StatusOK, res)
+
+}
