@@ -14,6 +14,9 @@ import (
 	// "titok_v1/utils"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/gorilla/websocket"
+	"gopkg.in/fatih/set.v0"
 )
 
 // 这个变量好像是全局的，我先注释掉了，sendmessage里有用掉，变量在comment.go里被定义了
@@ -21,16 +24,16 @@ import (
 // 	InvaildMsg = "参数错误"
 // )
 
-//发送消息,没写完
-// func SendMessage(c *gin.Context) {
-// 	messageServ := &service.MessageService{}
-// 	err := c.ShouldBindQuery(messageServ)
-// 	if err != nil {
-// 		c.JSON(http.StatusBadRequest, dto.BuildMessageDto(response.InvaildParameCode, InvaildMsg+err.Error(), nil))
-// 		return
-// 	}
+//本核心在于形成userid和Node的映射关系
+type Node struct {
+	Conn *websocket.Conn
+	//并行转串行,
+	DataQueue chan []byte
+	GroupSets set.Interface
+}
 
-// }
+
+
 
 //查看消息列表
 func MessageList(c *gin.Context) {
@@ -55,3 +58,14 @@ func MessageList(c *gin.Context) {
 	c.JSON(http.StatusOK, dto.BuildMessageListDto("0", response.OKMsg, messages))
 }
 
+
+//发送消息,没写完
+// func SendMessage(c *gin.Context) {
+// 	messageServ := &service.MessageService{}
+// 	err := c.ShouldBindQuery(messageServ)
+// 	if err != nil {
+// 		c.JSON(http.StatusBadRequest, dto.BuildMessageDto(response.InvaildParameCode, InvaildMsg+err.Error(), nil))
+// 		return
+// 	}
+
+// }
