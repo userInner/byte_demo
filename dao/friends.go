@@ -72,8 +72,11 @@ func GetFriendsList(u *models.User) ([]models.User, error) {
 	// 根据查询出来的用户信息中的好友id去user表中获得对应的信息
 	var friends []models.User
 	for k,_ :=range user{
+		var friend []models.User
 		// if IsUserFriend(&models.User{ID: u.ID}, &models.User{ID: user[k].ID}) {
 			common.GetDB().First(&friends,user[k].Friend_id)
+			friends.append(friends,friend)
+			// common.GetDB().Select("user_id=?",user[k].Friend_id).Find(&friends)
 		// }
 	}	
 	return friends,nil

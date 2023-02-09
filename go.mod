@@ -6,8 +6,10 @@ require (
 	github.com/gin-gonic/gin v1.8.2
 	github.com/golang-jwt/jwt/v4 v4.4.3
 	github.com/google/uuid v1.3.0
+	github.com/gorilla/websocket v1.5.0
 	github.com/minio/minio-go/v7 v7.0.47
 	github.com/u2takey/ffmpeg-go v0.4.1
+	gopkg.in/fatih/set.v0 v0.2.1
 	gorm.io/driver/mysql v1.4.5
 	gorm.io/gorm v1.24.5
 )

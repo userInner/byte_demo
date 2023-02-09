@@ -9,7 +9,7 @@ type Message struct {
 	Receiver_id int64 `gorm:"ForeignKey:Receiver_id;AssociationForeignKey:ID"`
 
 	Content     string
-	//CreateDate  string
+	CreateDate  string
 	Create_Time time.Time `gorm:"column:create_time"`
 	//Update_Time time.Time `gorm:"column:update_time"`
 }

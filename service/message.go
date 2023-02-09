@@ -21,23 +21,23 @@ type SendMessageResp struct {
 }
 
 //发送消息，初步写完，未测试
-func (message *MessageService) SendMessage(c *gin.Context) *resp.SendMessageResp {
-	newMessage := &models.Message{
-		From_User_ID:  message.FromUserID
-		To_User_ID:    message.ToUserID
-		Content:       message.Content
-		Create_Time:   message.CreateTime
-	}
+// func (message *MessageService) SendMessage(c *gin.Context) *resp.SendMessageResp {
+// 	newMessage := &models.Message{
+// 		From_User_ID:  message.FromUserID
+// 		To_User_ID:    message.ToUserID
+// 		Content:       message.Content
+// 		Create_Time:   message.CreateTime
+// 	}
 
-	err := dao.SendMessage(newMessage)
-	if err != nil {
-		return &resp.SendMessageResp{
-			StatusCode: http.StatusInternalServerError,
-			StatusMsg:  ErrServerInternal,
-		}
-	}
+// 	err := dao.SendMessage(newMessage)
+// 	if err != nil {
+// 		return &resp.SendMessageResp{
+// 			StatusCode: http.StatusInternalServerError,
+// 			StatusMsg:  ErrServerInternal,
+// 		}
+// 	}
 
-}
+// }
 
 // //查看聊天记录，没写完
 // func GetMessageListByUserID() {
