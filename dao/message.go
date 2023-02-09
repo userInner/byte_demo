@@ -8,7 +8,7 @@ import (
 )
 
 //获取聊天记录
-func GetMessage(a *models.User,r *models.User) ([]models.Message, error) {
+func GetMessageList(a *models.User,r *models.User) ([]models.Message, error) {
 	content := []models.Message{}
 	err := common.GetDB().
 		Model(&models.Message{}).
@@ -21,3 +21,11 @@ func GetMessage(a *models.User,r *models.User) ([]models.Message, error) {
 	return content,nil
 }
 
+//发送聊天,初步写完，未测试
+func SendMessage(newMessage *models.Message) error {
+	db := common.GetDB()
+	if err := db.Model(&models.Message{}).Create(newMessage).Error; err != nil {
+		return err
+	}
+	return nil
+}
