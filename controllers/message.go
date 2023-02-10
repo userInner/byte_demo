@@ -2,6 +2,7 @@ package controllers
 
 import (
 	// "fmt"
+	"log"
 	"net/http"
 	"strconv"
 	// "time"
@@ -9,14 +10,14 @@ import (
 	"titok_v1/dto"
 	"titok_v1/middleware"
 	"titok_v1/models"
-	resp "titok_v1/response"
-	// "titok_v1/service"
+	response "titok_v1/response"
+	"titok_v1/service"
 	// "titok_v1/utils"
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/gorilla/websocket"
-	"gopkg.in/fatih/set.v0"
+	// "github.com/gorilla/websocket"
+	// "gopkg.in/fatih/set.v0"
 )
 
 // 这个变量好像是全局的，我先注释掉了，sendmessage里有用掉，变量在comment.go里被定义了
@@ -53,14 +54,14 @@ func SendMessage(c *gin.Context) {
 	messageServ := &service.MessageService{}
 	err := c.ShouldBindQuery(messageServ)
 	if err != nil {
-		log.Printf("c.ShouldBind(&messageServ): %s\n", err.Error())
+		// log.Printf("c.ShouldBind(&messageServ): %s\n", err.Error())
 		c.JSON(http.StatusBadRequest, dto.BuildMessageDto(response.InvaildParameCode, InvaildMsg+err.Error(), nil))
 		return
 	}
 	log.Printf("messageServ: %v\n", messageServ)
 
-	if(messageServ.FromUserID==nil||messageServ.ToUserID==nil||messageServ.Content==""){
-		resp.Fail(c, nil, InvalidParams)
+	if(messageServ.Content==""){
+		response.Fail(c, nil, InvalidParams)
 		return
 	}
 

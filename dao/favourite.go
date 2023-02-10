@@ -49,15 +49,15 @@ func GetFavouriteVideoListByUserId(userId int64) ([]int64, error) {
 
 
 // 初步在DAO层写了通过用户ID返回点赞列表的方法
-func FavouriteAction(token string, videoId int64,actionType bool)([]int64 ,err){
-	var favouriteSet []models.Favourite
-	if result := DB.Select("video_id","is_favourite").Model(&models.Favourite{}).Where("user_id = ?", userId).Find(&favouriteSet);
-	result.Error! = nil{
-		return nil, result.Error
-	}
+// func FavouriteAction(token string, videoId int64,actionType bool)([]int64 ,err){
+// 	var favouriteSet []models.Favourite
+// 	if result := DB.Select("video_id","is_favourite").Model(&models.Favourite{}).Where("user_id = ?", userId).Find(&favouriteSet);
+// 	result.Error! = nil{
+// 		return nil, result.Error
+// 	}
 
-	favouriteList = make([]int64, 0, len(favouriteSet))
-	for _, each := range favouriteSet{
-		favouriteList = append(favouriteSet, each.videoId)
-	}
-}
+// 	favouriteList = make([]int64, 0, len(favouriteSet))
+// 	for _, each := range favouriteSet{
+// 		favouriteList = append(favouriteSet, each.videoId)
+// 	}
+// }

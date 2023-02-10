@@ -1,18 +1,24 @@
 package service
 
-// import (
-// 	// "gorm"
-// 	// "log"
-// 	"titok_v1/dao"
-// 	"titok_v1/models"
-// )
+import (
+	// "errors"
+	"github.com/gin-gonic/gin"
+	// "log"
+	"net/http"
+	"time"
+	"titok_v1/dao"
+	// "titok_v1/middleware"
+	"titok_v1/models"
+	resp "titok_v1/response"
+	// "titok_v1/utils"
+)
 
 type MessageService struct {
 	//Token       string `form:"token"`       // 必传：是
-	FromUserID  string `form:"from_user_id" bind:"required"`   // 必传：是 发送人id
-	ToUserID	string `form:"to_user_id" bind:"required"`	// 必传：是 接收人id
+	FromUserID  int64 `form:"from_user_id" bind:"required"`   // 必传：是 发送人id
+	ToUserID	int64 `form:"to_user_id" bind:"required"`	// 必传：是 接收人id
 	Content 	string `form:"content" bind:"required"` 	// 必传：是 消息内容
-	CreateTime  string `form:"create_time bind:"required"`  // 必传：是 发送时间
+	CreateTime  time.Time `form:"create_time bind:"required"`  // 必传：是 发送时间
 }
 
 type SendMessageResp struct {
@@ -23,10 +29,10 @@ type SendMessageResp struct {
 //发送消息，初步写完，未测试
 func (message *MessageService) SendMessage(c *gin.Context) *resp.SendMessageResp {
 	newMessage := &models.Message{
-		From_User_ID:  message.FromUserID
-		To_User_ID:    message.ToUserID
-		Content:       message.Content
-		Create_Time:   message.CreateTime
+		FromUserID:  message.FromUserID,
+		ToUserID:    message.ToUserID,
+		Content:       message.Content,
+		CreateTime:   message.CreateTime,
 	}
 
 	err := dao.SendMessage(newMessage)
@@ -37,7 +43,11 @@ func (message *MessageService) SendMessage(c *gin.Context) *resp.SendMessageResp
 		}
 	}
 
-// }
+	return &resp.SendMessageResp{
+		StatusCode: 0,
+		StatusMsg:  "success",
+	}
+}
 
 // //查看聊天记录，没写完
 // func GetMessageListByUserID() {
