@@ -8,7 +8,7 @@ import (
 func MessageRouters(r *gin.RouterGroup) {
 	message := r.Group("message")
 	{
-		// message.POST("/send/", controllers.SendMessage)
-		message.GET("/list/", controllers.MessageList)
+		message.POST("/action/", controllers.SendMessage)
+		message.GET("/chat/", controllers.MessageList)
 	}
 }
