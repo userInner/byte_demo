@@ -1,0 +1,30 @@
+[33m613a81d[m[33m ([m[1;36mHEAD -> [m[1;32mbyte_demo.V1[m[33m, [m[1;31morigin/byte_demo.V1[m[33m)[m HEAD@{0}: reset: moving to origin/byte_demo.V1
+[33m9a5a6f4[m HEAD@{1}: commit: 投稿
+[33m8e3bbea[m HEAD@{2}: commit (merge): Merge branch 'byte_demo.V1' of github.com:userInner/byte_demo into byte_demo.V1
+[33ma8aae4f[m[33m ([m[1;31morigin/temp[m[33m, [m[1;32mtemp[m[33m)[m HEAD@{3}: reset: moving to HEAD
+[33ma8aae4f[m[33m ([m[1;31morigin/temp[m[33m, [m[1;32mtemp[m[33m)[m HEAD@{4}: reset: moving to HEAD
+[33ma8aae4f[m[33m ([m[1;31morigin/temp[m[33m, [m[1;32mtemp[m[33m)[m HEAD@{5}: reset: moving to HEAD
+[33ma8aae4f[m[33m ([m[1;31morigin/temp[m[33m, [m[1;32mtemp[m[33m)[m HEAD@{6}: reset: moving to HEAD
+[33ma8aae4f[m[33m ([m[1;31morigin/temp[m[33m, [m[1;32mtemp[m[33m)[m HEAD@{7}: checkout: moving from temp to byte_demo.V1
+[33ma8aae4f[m[33m ([m[1;31morigin/temp[m[33m, [m[1;32mtemp[m[33m)[m HEAD@{8}: checkout: moving from byte_demo.V1 to temp
+[33ma8aae4f[m[33m ([m[1;31morigin/temp[m[33m, [m[1;32mtemp[m[33m)[m HEAD@{9}: reset: moving to HEAD
+[33ma8aae4f[m[33m ([m[1;31morigin/temp[m[33m, [m[1;32mtemp[m[33m)[m HEAD@{10}: reset: moving to HEAD
+[33ma8aae4f[m[33m ([m[1;31morigin/temp[m[33m, [m[1;32mtemp[m[33m)[m HEAD@{11}: commit (amend): "feed"
+[33m83f8e49[m HEAD@{12}: commit: "feed"
+[33mb5a4551[m HEAD@{13}: checkout: moving from temp to byte_demo.V1
+[33mb5a4551[m HEAD@{14}: checkout: moving from byte_demo.V1 to temp
+[33mb5a4551[m HEAD@{15}: reset: moving to HEAD
+[33mb5a4551[m HEAD@{16}: reset: moving to HEAD
+[33mb5a4551[m HEAD@{17}: reset: moving to HEAD
+[33mb5a4551[m HEAD@{18}: commit: 完成发布列表，评论，评论列表接口
+[33md9fadab[m HEAD@{19}: commit: 完成feedList接口
+[33mf9b246f[m HEAD@{20}: commit: 完成feed,userinfo,接口
+[33mcb8659b[m HEAD@{21}: commit: 登录,注册增加
+[33ma850516[m HEAD@{22}: commit (merge): 更改
+[33m1528195[m HEAD@{23}: commit: 更改
+[33mffcf9e7[m HEAD@{24}: commit: 设置feed路由,还未设置登录状态的video
+[33m32957e1[m HEAD@{25}: pull origin byte_demo.V1: Merge made by the 'ort' strategy.
+[33m9178d44[m HEAD@{26}: commit: byte_demo v1
+[33mc77fa92[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{27}: checkout: moving from master to byte_demo.V1
+[33mc77fa92[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{28}: commit: bytdemo v1
+[33m7fb5aa7[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{29}: initial pull

@@ -1,0 +1,391 @@
+按类分类的项目函数文档：
+
+
+
+
+===== DAO层 =====
+DAO层comment.go
+
+func GetCommentCount(video models.Video) int64
+输入videoId，查询数据库，统计特定videoId下的评论数。返回特定videoId下的评论总数。
+
+func InsertComment(comment *models.Comment) (*models.Comment, err)
+插入评论，若成功插入则返回一个指向该评论的指针和一个空错误。
+
+func GetCommentIsExist(comment *models.Comment) (bool,error)
+根据AuthorID, VideoID,commentID 判断此条评论是否存在，如果是返回true和一个空错误，如果不是返回false和一个空错误，如果出错，返回false和err。
+
+func DeleteComment(comment *models.Comment)(bool, error)
+根据传入的Comment实例，删除对应的评论。如果成功，返回true，nil;如果失败，情况一：对应评论不存在，返回false,nil。情况二：GetCommentIsExist函数执行失败，返回false,error
+情况三：Delete方法执行失败，返回false，nil.
+
+func GetCommentByVideoID(video *models.Video)([]models.Comment,error)
+根据输入的Video实例，返回一个由Comment实例组成的切片。若失败则返回nil。
+
+----
+
+DAO层favourite.go
+
+func GetFavourite(u *models.User, video *models.Video) (bool, error)
+输入userId videoId返回特定用户对特定视频的点赞状态。true代表已经点赞，false代表未点赞。
+
+func GetFavouriteVideoListByUserId(userId int64) ([]int64, error)
+根据输入的userId返回一个int64切片，其中包含该userId全部点赞过的videoId。如果成功执行则返回目标切片和一个空错误，如果失败则返回nil和一个对应的错误。
+
+----
+
+DAO层follow.go
+
+func IsUserFollow(u *model.Users, to_user *models.User) bool
+根据输入的User实例返回指定用户是否关注特定用户。如果关注则返回true,如果未关注则额返回false,如果函数执行失败则返回false,且在日志中打印一个Error。
+
+func FollowUser(u *models.Users, to_user *models.User)
+根据输入的User实体，向数据库 点赞关系表中 写入一条点赞数据，表示UserA关注了UserB。
+
+func FollowTB(u *models.User, to_user *models.User)(user, []models.User)
+根据输入User实体，返回一个关注列表User实例的切片。
+
+func FollowersTB(u *models.User, to_user *models.User)(user, []models.User)
+根据输入User实体，返回一个粉丝列表User实例的切片。
+
+---
+
+DAO层user_tb.go
+
+func IsExistUser(username string) bool
+根据输入username，查询数据库返回该用户是否存在。如果不存在则返回true，如果存在则返回false // ? 感觉有点问题
+
+func InsertUser(newUser *models.User) error
+根据输入User的实体，向数据库插入这个用户的记录，如果失败则返回err，如果成功则返回nil
+
+---
+
+DAO层user.go
+
+func GetUser(username, password string) models.User
+根据输入的username, password返回一个封装好的User实例。
+
+func GetUserByID(user_id int64)(*model.User, error)
+根据输入的user_id返回一个指向包含这个user_id的User实例的指针和一个error。如果成功则返回这个实例和nil，如果失败则返回nil和日志中写入一条新错误。
+
+---
+
+DAO层video.go
+
+func GetVideo(time string)([]models.Video, error)
+根据输入时间，按投稿时间倒序返回视频列表（Video实例的切片）。如果成功则返回这个切片，和nil，如果失败则返回nil且在日志中写入一条新错误。
+
+func GetVideoByUser(u models.User)([]models.Video, error)
+根据输入的User实例，返回一个包含该用户全部投稿视频的切片和一个error.如果成功则返回该切片和nil，如果失败则返回nil，且在日志中写入一条新错误。
+
+func GetVideoByID(video *models.Video)(*models.Video, error) //这个是不是有点问题？ 为什么输入video实例返回video实例？
+
+func CreateVideo(video *models.Video) error
+输入一个video实例，在数据库对应表格写入包含该video的记录。如果成功，则返回nil。如果失败，情况一：输入实体未空，日志中新增一条空指针错误。情况二：数据库错误，日志中新增一条对应错误。
+
+
+
+===== DTO层 =====
+
+DTO层comment.go
+
+type CommentDto Struct 封装评论内容 创建日期 ID和作者的结构体
+
+type CommentListDto Struct  封装评论名单（一个CommentDto实例组成的切片） 状态码和状态信息的结构体
+
+type CommentActionDto Struct 封装状态码 状态信息 和一个指向Comment实例的指针的结构体
+
+func BuildCommentActionDto(comment *models.Comment) *CommentDto 
+根据输入Comment实体 封装成一个CommentDto实体并返回。如果成功则返回一个指向CommentDto的指针变量，如果失败则返回nil.
+
+func BuildCommentListDto(code string, msg string, comment []models.Comment) *CommentListDto
+根据输入状态码 msg和 comment 封装成一个 CommentDto的切片，然后把这个切片封装到CommentListDto结构体中，且返回一个该结构体的地址。
+
+---
+
+DTO层message.go
+
+type MessageDto Struct 封装聊天内容 内容发布日期 聊天ID的一个结构体
+
+type MessageListDto Struct 封装聊天列表 状态码 状态描述信息的结构体
+
+func BuildMessageDto(message *models.Message) *MessageDto 构造一个MessageDto结构体实例 如果成功则返回一个指向该MessageDto的指针，如果输入为空则返回nil 
+
+func BuildMessageDto(code string, msg string, message []models.Message) *MessaageListDto 
+根据输入状态码、状态描述和传入message实例，构造一个MessageListDto的实例并返回一个指向它的指针。如果传入未传入message实例则返回nil
+
+
+---
+
+DTO层publish.go
+
+type PublishDto 封装状态码 状态信息的结构体 
+
+func BuildPublishDto(code string, msg string) *PublishDto
+返回一个指向封装好的PublishDto结构体的指针
+
+---
+
+DTO层user.go
+
+type UserDto struct 一个封装关注总数，粉丝总数、用户ID、关注状态和用户名称的结构体
+
+type UserInfoDto struct 一个封装状态码、返回状态描述、用户信息的结构体
+
+func BuildUserDto(user *model.User) *UserDto 根据输入的User实例构造一个UserDto实例，成功则返回一个指向该结构体的指针。如果输入为空则返回nil。
+
+func (u UserInfoDto) BuildUserInfoDto (code int64, msg string, user *models.User) *UserInfoDto
+根据输入code,msg, user实例，返回一个封装好的UserInfoDto实例。并没有错误处理和其他返回。
+
+---
+
+DTO层Video.go
+
+type VideoDto struct 一个封装作者信息、评论数、封面URL、视频点赞数、视频ID、是否点赞、视频播放地址、视频标题的结构体。
+
+func BuildFeedDto(videoList []models.Video) []VideoDto
+根据传入的Video切片，将其中Video实例封装成VideoDto，且封装在VideoDto切片中，返回一个VideoDto切片。
+
+---
+
+DTO层videoFeed.go
+
+type Feed struct 一个封装发布最早时间、状态码、状态描述、视频列表切片的结构体
+
+type UserFeedStruct 一个封装状态码、状态描述、用户发布视频列表切片的结构体
+
+func BuildUserFeed(code int64, msg string, videoList []models.Video) *UserFeed
+将传入的状态码、状态信息、视频实例切片封装在一个UserFeed结构体中并返回一个指向这个实例的指针
+
+func BuildFeed(nextTime int64, statuscode int64, statusMsg string, videoList []models.Video) *Feed
+将传入的 nextTime、状态码、状态描述、视频实例切片封装到Feed结构体中，并返回一个指向该实例的指针
+
+===== middleware =====
+
+middleware层的Auth.go
+
+type JWTClaims struct 一个封装用户ID、用户名和token的结构体
+
+func GenToken(userid int64, userName string) (string,error)
+根据传入userid,useerName，调用jwt包生成一个注册声明且封装在一个JWTClaims实例中。根据这个注册声明和HS256加密方法调用JWT包生成一个签名token。
+若成功则返回这个token和一个nil。若失败则返回一个nil和一个err.
+
+func ParseToken(tokenString string)(*JWTClaims, error)
+调用JWT包汇中的解析方法解析传入的token，如果解析成功则返回秘文“Gegege”，如果失败// 这个OK是个什么东西？ [未完成]
+
+func VerifyToken(tokenString string)(int64, error)
+函数功能应该是根据传入tokenString进行验证，如果成功则返回这个token中包含的用户id。如果失败则返回int64(0)和一个错误。需要理解ParseToken{}这个函数。[未完成]
+
+---
+
+middleware层的Cors.go
+
+func CORSMiddleware() gin.HandlerFunc [未完成][待查]
+
+---
+
+middleware层的Recovery.go
+
+func RecoveryMiddleware() gin.HandlerFunc [未完成][待查]
+
+===== models层 =====
+
+models层的comment.go
+
+type Comment struct 一个封装ID 用户ID 用户名 视频ID 评论内容 创建日期 创建时间戳和更新时间戳的结构体
+
+func(v comment) TableName() string 一个返回"comment_tb"的静态函数
+
+---
+
+models层的favourite.go
+
+type Favourite struct 一个封装点赞关系的结构体
+
+func(v Favourite) TableName() string 一个返回“favourite_tb”的静态函数
+
+---
+
+models层的follow.go
+
+type Follow struct 一个封装关注信息的结构体 其中包含 关系ID UserID  user_tb ToUserID toUser_tb IsFollow [未完成]//这个toUser_tb是做什么的？
+
+func (v Follow) TableName() string 一个返回“follow_tb”的静态函数
+
+---
+
+models层的friends.go
+
+type Friends struct 一个封装好友信息的结构体
+
+func(v Friends) TableName() string 一个返回“friends_tb”的静态函数
+
+---
+
+models层的message.go 
+
+type Message struct一个封装用户之间消息信息的结构体
+
+func(v Message) tableName() string 一个返回“message_tb”的静态函数
+
+---
+
+models层的user.go 
+
+type User struct一个封装用户信息的结构体
+
+func(v User) TableName() string 一个返回“user_tb”的静态函数
+
+---
+models层的video.go 
+
+type Video struct 一个封装视频信息的结构体
+
+func(v Video) TableName() string 一个返回“video_tb“的静态函数
+
+===== response层 =====
+
+response层的favourite_resp.go [未完成]
+
+---
+
+response层的response.go
+
+func Response(c *gin.Context, httpStatus, code int, data gin.H, msg string) [未完成]
+
+func Success(c *gin.Context, data gin.H, msg string)[未完成]
+
+func Fail(c *gin.Context, data gin.H, msg string)[未完成]
+
+---
+
+response层的user_resp.go
+
+type UserLoginResp struct 一个封装了用户登陆返回信息的结构体
+
+===== router层 =====
+
+router层的commentRouters.go
+
+func CommentRouters(r *gin.RouterGroup)
+gin的路由分组功能[未完成]
+
+---
+
+router层的FeedRouters.go
+
+func FeedRoutes(r *gin.RouterGroup) [未完成]
+
+---
+
+router层的initRouters.go
+
+func InitRouter(r *gin.Engine) *gin.Engine
+gin里的方法还没有看[完成]
+
+---
+
+router层的PublishRouters（r *gin.RouterGroup）
+发布？[未完成]
+
+---
+
+router层的user.go
+
+func UserRoutes(r *gin.RouterGroup)
+gin里的方法没有看[未完成]
+
+
+===== Service层 =====
+
+service层的comment.go
+
+type Comment Service struct 一个封装评论相关信息的结构体。可是为什么要放在Service？
+
+---
+
+service层favourite.go
+
+func (f *favouriteService) GetFavouriteStatus(userId int64, videoId int64) (bool, error)
+输入userId videoId获取特定用户对特定视频的点赞状态。true代表已经点赞，false代表未点赞。
+
+func (f *favouriteService) FavoriteAction(userId int64, videoId int64, actionType int32) (bool, error)
+输入userId videoId actiontype决定是否是点赞还是消赞。actiontype == 0 代表消赞，1代表点赞。
+
+
+---
+
+service层的publish.go
+
+type PublishForm struct
+*multipart.FileHeader是做什么的？[未完成]
+
+---
+
+service层的users.go
+
+type UserServicee struct 一个封装用户登陆信息的结构体
+
+func (u *UserService) Login(c *gin.Context)(*resp.UserLoginResp, error)
+根据传入一个指向gin.Context的指针，生成一个登陆状态返回的实例并返回一个指向这个实例的指针和错误。若失败则返回一个nil且在日志中打印一条新错误。
+
+func (user *UserService) Register(c *gin.Context) *resp.UserLoginResp
+看名称应该是注册这个功能的业务逻辑。根据输入gin的上下文新建一个User实例并将对应信息插入数据库中。如果数据库中已存在本条记录则返回一个预设好的结构体实体。
+成功注册完成则生成一个返回实例并返回一个指向这个实例的指针。
+
+建桶是做什么的？
+
+func checkUser(name, password string) bool
+根据输入用户名和密码判断用户信息是否正确，如果是则返回true，不是则返回false
+
+
+===== utils层 =====
+
+utils层的GetCover.go
+
+func GetVideoCover(filePath string) ([]byte, error)
+这应该是一个调用ffmpeg包，截取视频封面的函数。
+
+---
+
+utils层的getTime.go
+
+func GetTimeInt64(t string) int64
+把日期时间转化为时间戳并返回
+
+func GetTime() time.Time
+返回当前系统时间 // 应该返回的是个时间戳？
+
+---
+
+utils层的md5.go
+
+func Md5Crypt(str string, salt ... interface{})(CryptStr string)
+
+这个salt是做什么用的？ 
+函数功能应该是将输入string通过Md5方法加密
+
+---
+
+utils层的mio.go
+
+func CreateBucket(c *gin.Context, user_id string) bool
+没有看gin 看不懂这个函数 [未完成]
+
+为什么要建桶？
+
+func UploadUserVideo(c *gin.Context, modelVideo *models.Video, fileName string, video *multipart.FileHeader) error
+这个函数应该是按照流程获取URL、截取封面并上传，额 Create Video最后返回的是一个nil啊 [未完成]
+
+func GetMinoUrl(c *gin.Context, fileName string, expires time.Duration)(*url.URL, error)
+应该是使用Minio完成对象存储之后 获取对应资源URL的函数[未完成]
+
+---
+
+utils层的VaildToken.go
+
+func GetTokenUser(token string)(*models.User, error) 返回nill和nil
+
+func VaildToken(token string) bool
+这两个方法还没有写完
+
