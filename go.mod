@@ -6,10 +6,8 @@ require (
 	github.com/gin-gonic/gin v1.8.2
 	github.com/golang-jwt/jwt/v4 v4.4.3
 	github.com/google/uuid v1.3.0
-	github.com/gorilla/websocket v1.5.0
 	github.com/minio/minio-go/v7 v7.0.47
 	github.com/u2takey/ffmpeg-go v0.4.1
-	gopkg.in/fatih/set.v0 v0.2.1
 	gorm.io/driver/mysql v1.4.5
 	gorm.io/gorm v1.24.5
 )
@@ -40,10 +38,10 @@ require (
 	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/u2takey/go-utils v0.3.1 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
-	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
-	golang.org/x/net v0.4.0 // indirect
-	golang.org/x/sys v0.3.0 // indirect
-	golang.org/x/text v0.5.0 // indirect
+	golang.org/x/crypto v0.31.0 // indirect
+	golang.org/x/net v0.21.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/ini.v1 v1.66.6 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
